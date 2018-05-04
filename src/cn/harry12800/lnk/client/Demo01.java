@@ -20,7 +20,6 @@ public class Demo01 {
 					if (address instanceof InetAddress) {
 						System.err.println(address.getHostAddress());
 						System.err.println(address.getHostName());
-						System.err.println(address.getLocalHost().getHostAddress());
 					}
 				}
 				StringBuilder builder = new StringBuilder();

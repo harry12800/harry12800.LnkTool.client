@@ -34,7 +34,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	List<ClientConnectionParam> exports;
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
 	public Context context;
-	public ListPanel listPanel;
+	public ListPanel<?> listPanel;
 	public List<Letter> letters;
 
 	public ClientExportPanel(Context context) {
@@ -49,7 +49,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		setLayout(null);
 		this.letters = Lists.newArrayList();
 		//		new DragListener(this);
-		this.listPanel = new ListPanel();
+		this.listPanel = new ListPanel<>();
 		listPanel.setBounds(0, 0, width, 6 * 32 + 25 + 210);
 
 		JScrollPane a = new JScrollPane(listPanel) {

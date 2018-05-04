@@ -27,8 +27,8 @@ public class NotifyAll extends Thread {
 
 	@Override
 	public void run() {
-		try {
-			DatagramSocket detectSocket = new DatagramSocket(8888);
+		try (
+			DatagramSocket detectSocket = new DatagramSocket(8888);){
 			byte[] buf = new byte[1024];
 			int packetPort = 9999;
 			String ba = getBroadcastAddress(getBroadcastAddress());
@@ -57,7 +57,7 @@ public class NotifyAll extends Thread {
 						InetSocketAddress socketAddress = (InetSocketAddress) packet.getSocketAddress();
 						Letter letter = new Letter(split[0], split[1], socketAddress.getAddress().getHostAddress());
 						clientExportPanel.letters.add(letter);
-						ItemPanel itemPanel = new ItemPanel<>(letter);
+						ItemPanel  itemPanel = new ItemPanel< >(letter);
 						clientExportPanel.listPanel.addItem(itemPanel);
 						System.out.println(rcvd);
 					}
