@@ -5,6 +5,7 @@ public class ClientConnectionParam {
 	String userName;
 	String pass;
 	String url;
+
 	/**
 	 * 获取userName
 	 *	@return the userName
@@ -12,6 +13,7 @@ public class ClientConnectionParam {
 	public String getUserName() {
 		return userName;
 	}
+
 	/**
 	 * 设置userName
 	 * @param userName the userName to set
@@ -19,6 +21,7 @@ public class ClientConnectionParam {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 	/**
 	 * 获取pass
 	 *	@return the pass
@@ -26,6 +29,7 @@ public class ClientConnectionParam {
 	public String getPass() {
 		return pass;
 	}
+
 	/**
 	 * 设置pass
 	 * @param pass the pass to set
@@ -33,6 +37,7 @@ public class ClientConnectionParam {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
+
 	/**
 	 * 获取url
 	 *	@return the url
@@ -40,6 +45,7 @@ public class ClientConnectionParam {
 	public String getUrl() {
 		return url;
 	}
+
 	/**
 	 * 设置url
 	 * @param url the url to set
@@ -47,12 +53,11 @@ public class ClientConnectionParam {
 	public void setUrl(String url) {
 		this.url = url;
 	}
- 
+
 	@Override
 	public String toString() {
 		return "DbExportType [userName=" + userName + ", pass=" + pass
 				+ ", url=" + url + "]";
 	}
-	 
-	
+
 }

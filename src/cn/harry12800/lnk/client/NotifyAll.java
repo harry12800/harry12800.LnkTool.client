@@ -85,9 +85,8 @@ public class NotifyAll extends Thread {
 	private static String getBroadcastAddress() {
 		Map<String, String> ipSet = getIpSet();
 		Set<Entry<String, String>> entrySet2 = ipSet.entrySet();
-
 		Properties p = new Properties();
-		try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("src/config/mac.properties")) {
+		try (InputStream input = NotifyAll.class.getResourceAsStream("/mac.properties")) {
 			System.err.println(input);
 			p.load(input);
 		} catch (IOException e) {

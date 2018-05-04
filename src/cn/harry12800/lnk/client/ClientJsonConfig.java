@@ -23,5 +23,5 @@ public class ClientJsonConfig {
 	public void setList(List<ClientConnectionParam> list) {
 		this.list = list;
 	}
-	
+
 }
