@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-<<<<<<< HEAD
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.develper"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.j2se"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.tools"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.dbhelper"/>
-	<classpathentry kind="lib" path="lib/DJNativeSwing-SWT.jar"/>
-	<classpathentry kind="lib" path="lib/DJNativeSwing.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.LnkTool.core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.server"/>
-=======
-	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
@@ -28,13 +22,12 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.j2se"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.LnkTool.core"/>
->>>>>>> branch 'master' of https://github.com/harry12800/harry12800.LnkTool.client.git
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.j2se"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/harry12800.LnkTool.core"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

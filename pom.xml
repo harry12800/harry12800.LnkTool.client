@@ -5,27 +5,15 @@
 	<artifactId>LnkTool.client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>多终端</description>
-<<<<<<< HEAD
-	<build>
-=======
 	<dependencies>
-	 <dependency>
-      <groupId>cn.harry12800</groupId>
-    <artifactId>harry12800.tools</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </dependency>
+		<dependency>
+			<groupId>cn.harry12800</groupId>
+			<artifactId>harry12800.tools</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
->>>>>>> branch 'master' of https://github.com/harry12800/harry12800.LnkTool.client.git
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
