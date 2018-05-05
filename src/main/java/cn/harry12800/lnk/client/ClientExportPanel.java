@@ -25,7 +25,9 @@ import cn.harry12800.j2se.style.UI;
 import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.Letter;
 import cn.harry12800.j2se.tip.ListPanel;
-import cn.harry12800.lnk.client.NotifyAll.NotifyCallback;
+import cn.harry12800.lnk.client.accept.BroadcastReceiveThread;
+import cn.harry12800.lnk.client.accept.NotifyAll;
+import cn.harry12800.lnk.client.accept.NotifyAll.NotifyCallback;
 import cn.harry12800.lnk.client.entity.ClientInfo;
 import cn.harry12800.tools.Lists;
 
