@@ -62,7 +62,6 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		//		new DragListener(this);
 		this.listPanel = new ListPanel<ClientInfo>();
 		listPanel.setBounds(0, 0, width, 6 * 32 + 200);
-
 		JScrollPane a = new JScrollPane(listPanel) {
 			private static final long serialVersionUID = 1L;
 
