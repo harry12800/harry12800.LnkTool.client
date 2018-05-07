@@ -26,7 +26,6 @@ import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.Letter;
 import cn.harry12800.j2se.tip.ListPanel;
 import cn.harry12800.lnk.client.accept.BroadcastReceiveThread;
-import cn.harry12800.lnk.client.accept.NotifyAll;
 import cn.harry12800.lnk.client.accept.NotifyAll.NotifyCallback;
 import cn.harry12800.lnk.client.entity.ClientInfo;
 import cn.harry12800.tools.Lists;
@@ -44,6 +43,8 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	public Context context;
 	public ListPanel<ClientInfo> listPanel;
 	MButton refresh = new MButton("刷新", 80, 25);
+	MButton set = new MButton("设置MAC地址", 80, 25);
+	MButton udptcp = new MButton("UDP", 80, 25);
 	public List<Letter> letters;
 
 	
@@ -83,10 +84,19 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		a.setBounds(0, 0, width, 6 * 32 + 200);
 		add(a);
 		refresh.setBounds(5, 6 * 32 + 250 - 30, 80, 25);
+		set.setBounds(105, 6 * 32 + 250 - 30, 80, 25);
+		udptcp.setBounds(205, 6 * 32 + 250 - 30, 80, 25);
 		add(refresh);
+		add(udptcp);
+		add(set);
 		setSize(width, 6 * 32 + 250);
 		initBtnListener();
 		new BroadcastReceiveThread().start();
+		try {
+			BroadcastReceiveThread.send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		NotifyCallback callback = new NotifyCallback() {
 			@Override
 			public void notifyClientinfo(ClientInfo clientinfo) {
@@ -95,13 +105,24 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 				listPanel.addItem(itemPanel);
 			}
 		};
-		new NotifyAll( callback ).start();
+		new SessionDialog(this);
+//		new NotifyAll( callback ).start();
 	}
 
 	private void initBtnListener() {
 		refresh.addMouseListener(new ClickAction(refresh) {
 			public void leftClick(MouseEvent e) {
 				refreshIP();
+			}
+		});
+		udptcp.addMouseListener(new ClickAction(udptcp) {
+			public void leftClick(MouseEvent e) {
+				
+			}
+		});
+		set.addMouseListener(new ClickAction(set) {
+			public void leftClick(MouseEvent e) {
+				
 			}
 		});
 	}
