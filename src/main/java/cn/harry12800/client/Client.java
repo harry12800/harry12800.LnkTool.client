@@ -56,7 +56,6 @@ public class Client {
 		
 		// 设置循环线程组事例
 		bootstrap.group(workerGroup);
-
 		// 设置channel工厂
 		bootstrap.channel(NioSocketChannel.class);
 
@@ -95,7 +94,6 @@ public class Client {
 
 	/**
 	 * 获取会话
-	 * 
 	 * @return
 	 */
 	public Channel getChannel() {
@@ -113,5 +111,4 @@ public class Client {
 		}
 		channel.writeAndFlush(request);
 	}
-	
 }

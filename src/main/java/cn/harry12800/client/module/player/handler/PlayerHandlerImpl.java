@@ -53,18 +53,19 @@ public class PlayerHandlerImpl implements PlayerHandler{
 
 	@Override
 	public void showAllUser(int resultCode, byte[] data) {
-		if(resultCode == ResultCode.SUCCESS){
+		if(resultCode == ResultCode.SUCCESS) {
 			ShowAllPlayerResponse response = new ShowAllPlayerResponse();
 			response.readFromBytes(data);
 			List<PlayerResponse> players = response.getPlayers();
 			List<ClientInfo> lists = Lists.newArrayList();
+			System.out.println(players.size());
 			for (PlayerResponse playerResponse2 : players) {
 				ClientInfo c = new ClientInfo(playerResponse2.getPlayerName(), playerResponse2.getPlayerId()+"", "");
 				lists.add(c);
 			}
 			ClientExportPanel.instance.showUser(lists);
-			swingclient.getTips().setText("显示成功");
 		}else{
+			System.out.println("resultCode?");
 			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}

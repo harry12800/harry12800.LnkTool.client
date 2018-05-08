@@ -8,6 +8,7 @@ import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.ResultCode;
 import cn.harry12800.common.module.chat.response.ChatResponse;
 import cn.harry12800.common.module.chat.response.ChatType;
+import cn.harry12800.lnk.client.ClientExportPanel;
 
 @Component
 public class ChatHandlerImpl implements ChatHandler{
@@ -72,7 +73,7 @@ public class ChatHandlerImpl implements ChatHandler{
 				builder.append(chatResponse.getMessage());
 				builder.append("\n\n");
 			}
-			
+			ClientExportPanel.instance.showMsg(chatResponse.getSendPlayerId(),builder.toString());
 			swingclient.getChatContext().append(builder.toString());
 		}
 	}
