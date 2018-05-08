@@ -6,17 +6,23 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import cn.harry12800.Lnk.core.Context;
 import cn.harry12800.Lnk.core.CorePanel;
 import cn.harry12800.Lnk.core.FunctionPanelConfig;
 import cn.harry12800.Lnk.core.FunctionPanelModel;
 import cn.harry12800.Lnk.core.util.ImageUtils;
+import cn.harry12800.client.Client;
 import cn.harry12800.j2se.component.ClickAction;
 import cn.harry12800.j2se.component.MButton;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;
@@ -32,7 +38,7 @@ import cn.harry12800.tools.Lists;
 
 @FunctionPanelModel(configPath = "client", height = 6 * 32 + 200, width = 350, defaultDisplay = true, backgroundImage = "client_back.jpg", headerImage = "teminal.png", desc = "多端操作。")
 @FunctionPanelConfig(filename = "client.json")
-public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
+public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements ActionListener{
 	/**
 	 * 
 	 */
@@ -47,9 +53,11 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	MButton udptcp = new MButton("UDP", 80, 25);
 	public List<Letter> letters;
 
-	
+	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+	Client client = null;
 	public ClientExportPanel(Context context) {
 		super(context);
+		client = applicationContext.getBean(Client.class);
 		try {
 			this.context = context;
 		} catch (Exception e1) {
@@ -90,12 +98,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		add(set);
 		setSize(width, 6 * 32 + 250);
 		initBtnListener();
-		new BroadcastReceiveThread().start();
-		try {
-			BroadcastReceiveThread.send();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		new BroadcastReceiveThread().start();
+//		try {
+//			BroadcastReceiveThread.send();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		NotifyCallback callback = new NotifyCallback() {
 			@Override
 			public void notifyClientinfo(ClientInfo clientinfo) {
@@ -104,7 +112,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 				listPanel.addItem(itemPanel);
 			}
 		};
-		new SessionDialog(this);
+//		new SessionDialog(this);
 //		new NotifyAll( callback ).start();
 	}
 
@@ -150,5 +158,10 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 				BasicStroke.JOIN_ROUND)); // 设置新的画刷
 		g2d.setFont(new Font("宋体", Font.PLAIN, 12));
 		g2d.drawString("数据库", 5, 15);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
 	}
 }
