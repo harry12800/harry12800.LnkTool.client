@@ -23,6 +23,10 @@ import cn.harry12800.Lnk.core.FunctionPanelConfig;
 import cn.harry12800.Lnk.core.FunctionPanelModel;
 import cn.harry12800.Lnk.core.util.ImageUtils;
 import cn.harry12800.client.Client;
+import cn.harry12800.common.core.model.Request;
+import cn.harry12800.common.module.ModuleId;
+import cn.harry12800.common.module.player.PlayerCmd;
+import cn.harry12800.common.module.player.request.ShowAllPlayerRequest;
 import cn.harry12800.j2se.component.ClickAction;
 import cn.harry12800.j2se.component.MButton;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;
@@ -31,7 +35,6 @@ import cn.harry12800.j2se.style.UI;
 import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.Letter;
 import cn.harry12800.j2se.tip.ListPanel;
-import cn.harry12800.lnk.client.accept.BroadcastReceiveThread;
 import cn.harry12800.lnk.client.accept.NotifyAll.NotifyCallback;
 import cn.harry12800.lnk.client.entity.ClientInfo;
 import cn.harry12800.tools.Lists;
@@ -45,6 +48,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	private static final long serialVersionUID = 1L;
 	private int width = 350;
 	List<ClientConnectionParam> exports;
+	public static ClientExportPanel instance;
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
 	public Context context;
 	public ListPanel<ClientInfo> listPanel;
@@ -63,7 +67,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
+		instance  = this;
 		setBackground(UI.backColor);
 		setLayout(null);
 		this.letters = Lists.newArrayList();
@@ -135,7 +139,15 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	}
 
 	protected void refreshIP() {
-
+		
+		try {
+			ShowAllPlayerRequest request = new ShowAllPlayerRequest();
+			//构建请求
+			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.SHOW_ALL_USER, request.getBytes());
+			client.sendRequest(request1);
+		} catch (Exception e) {
+//			tips.setText("无法连接服务器");
+		}
 	}
 
 	public static void main(String[] args) {
@@ -163,5 +175,13 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+	}
+
+	public void showUser(List<ClientInfo> lists) {
+		for (ClientInfo clientInfo : lists) {
+			System.out.println(clientInfo);
+			ItemPanel<ClientInfo> itemPanel = new ItemPanel<ClientInfo>(clientInfo);
+			listPanel.addItem(itemPanel );
+		}
 	}
 }
