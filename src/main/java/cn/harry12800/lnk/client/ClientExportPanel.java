@@ -9,13 +9,13 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -60,7 +60,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
 	public Context context;
 	public ListPanel<UserInfo> listPanel;
-	MButton refresh = new MButton("登录", 80, 25);
+	MButton loginBtn = new MButton("登录", 80, 25);
 	MButton set = new MButton("设置MAC地址", 80, 25);
 	MButton udptcp = new MButton("UDP", 80, 25);
 	public List<Letter> letters;
@@ -71,7 +71,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	Client client = null;
 	UserInfo self = null;
 	private List<UserInfo> userList;
-	static Map<UserInfo,SessionDialog>  mapsDialogByUser = new HashedMap();
+	static Map<UserInfo,SessionDialog>  mapsDialogByUser = new HashMap<UserInfo,SessionDialog>(0);
 	public ClientExportPanel(Context context) {
 		super(context);
 		client = applicationContext.getBean(Client.class);
@@ -108,10 +108,10 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		a.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		a.setBounds(0, 0, width, 6 * 32 + 170);
 		add(a);
-		refresh.setBounds(270, 6 * 32 + 250 - 70, 80, 25);
+		loginBtn.setBounds(270, 6 * 32 + 250 - 70, 80, 25);
 		set.setBounds(105, 6 * 32 + 250 - 30, 80, 25);
 		udptcp.setBounds(205, 6 * 32 + 250 - 30, 80, 25);
-		add(refresh);
+		add(loginBtn);
 		add(udptcp);
 		add(set);
 		setSize(width, 6 * 32 + 250);
@@ -139,7 +139,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	}
 
 	private void initBtnListener() {
-		refresh.addMouseListener(new ClickAction(refresh) {
+		loginBtn.addMouseListener(new ClickAction(loginBtn) {
 			public void leftClick(MouseEvent e) {
 				refreshIP();
 			}

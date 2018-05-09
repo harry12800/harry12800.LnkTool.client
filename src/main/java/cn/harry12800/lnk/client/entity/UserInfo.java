@@ -2,10 +2,17 @@ package cn.harry12800.lnk.client.entity;
 
 import cn.harry12800.j2se.tip.Letter;
 
+/**
+ * 客户端客户信息
+ * @author zr0014
+ *
+ */
 public class UserInfo extends Letter {
 
+	private String id;
 	private String name;
 	private String ip;
+	private String clientType;
 	private String mac;
 
 	public UserInfo(String name, String mac, String ip) {
@@ -15,12 +22,12 @@ public class UserInfo extends Letter {
 		this.mac = mac;
 	}
 
-	public String getMac() {
-		return mac;
+	public String getId() {
+		return id;
 	}
 
-	public void setMac(String mac) {
-		this.mac = mac;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -39,4 +46,20 @@ public class UserInfo extends Letter {
 		this.ip = ip;
 	}
 
+	public String getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(String clientType) {
+		this.clientType = clientType;
+	}
+
+	public String getMac() {
+		return mac;
+	}
+
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
+	
 }
