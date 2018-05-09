@@ -241,8 +241,13 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			if(clientInfo.getContent().equals(""+sendPlayerId)){
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
+				ClientExportPanel.this.sessionDialog.requestFocus();
 				ClientExportPanel.this.sessionDialog.showMsg(msg);
 			}
 		}
+	}
+
+	public void showNotify(String tipContent) {
+		ClientExportPanel.this.sessionDialog.showNotify(tipContent);
 	}
 }

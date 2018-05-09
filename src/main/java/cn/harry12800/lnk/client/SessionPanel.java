@@ -19,20 +19,26 @@ import cn.harry12800.j2se.style.UI;
 public class SessionPanel extends JPanel implements KeyListener {
 
 	ImageBtn closeButton;
-	private JLabel titleLabel = new JLabel("语言翻译");
+	  JLabel titleLabel = new JLabel("语言翻译");
+	  JLabel notifyLabel = new JLabel("");
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
 	AreaTextPanel areaTextPanel1 = new AreaTextPanel();
 	String btnText = "发送";
-	MButton OkBtn = new MButton(btnText, 50, 30);
+	String clearText = "清空";
+	MButton sendBtn = new MButton(btnText, 50, 30);
+	MButton clearBtn = new MButton(clearText, 50, 30);
 	private SessionDialog dialog;
 	SendEvent e;
-	public static interface SendEvent{
+
+	public static interface SendEvent {
 		void send(String conent);
 	}
-	void addSendEvent(SendEvent e){
-		this.e  = e;
+
+	void addSendEvent(SendEvent e) {
+		this.e = e;
 	}
-	public SessionPanel( SessionDialog dialog  ) {
+
+	public SessionPanel(SessionDialog dialog) {
 		this.dialog = dialog;
 		setOpaque(false);
 		closeButton = new ImageBtn(ImageUtils.getByName("close24.png"));
@@ -61,9 +67,17 @@ public class SessionPanel extends JPanel implements KeyListener {
 				dialog.dispose();
 			}
 		});
-		OkBtn.addActionListener(new ActionListener() {
+		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e1) {
-				e.send(areaTextPanel1.getText());
+				if(!"".equals(areaTextPanel1.getText().trim()))
+					e.send(areaTextPanel1.getText());
+				areaTextPanel1.setText("");
+			}
+		});
+		clearBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e1) {
+				areaTextPanel1.setText("");
+				areaTextPanel.setText("");
 			}
 		});
 		areaTextPanel1.addKeyListener(this);
@@ -75,7 +89,9 @@ public class SessionPanel extends JPanel implements KeyListener {
 		closeButton.setBounds(485, 0, 25, 25);
 		areaTextPanel.setBounds(5, 30, 500, 250);
 		areaTextPanel1.setBounds(5, 285, 500, 50);
-		OkBtn.setBounds(420, 340, 50, 30);
+		sendBtn.setBounds(430, 340, 50, 30);
+		clearBtn.setBounds(380, 340, 50, 30);
+		notifyLabel.setBounds(5, 340, 200, 30);
 	}
 
 	private void addComponent() {
@@ -83,7 +99,9 @@ public class SessionPanel extends JPanel implements KeyListener {
 		add(areaTextPanel);
 		add(areaTextPanel1);
 		add(titleLabel);
-		add(OkBtn);
+		add(sendBtn);
+		add(clearBtn);
+		add(notifyLabel);
 	}
 
 	@Override
@@ -99,9 +117,13 @@ public class SessionPanel extends JPanel implements KeyListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == 27) {
+	public void keyReleased(KeyEvent e1) {
+		if (e1.getKeyCode() == 27) {
 			dialog.setVisible(false);
+		} else if (e1.getKeyCode() == 10) {
+			if(!"".equals(areaTextPanel1.getText().trim()))
+				e.send(areaTextPanel1.getText());
+			areaTextPanel1.setText("");
 		}
 	}
 

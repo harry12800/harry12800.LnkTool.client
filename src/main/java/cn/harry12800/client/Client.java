@@ -80,7 +80,7 @@ public class Client {
 	public void connect() throws InterruptedException {
 
 		// 连接服务端
-		ChannelFuture connect = bootstrap.connect(new InetSocketAddress("127.0.0.1", 10102));
+		ChannelFuture connect = bootstrap.connect(new InetSocketAddress("119.23.9.164", 10000));
 		connect.sync();
 		channel = connect.channel();
 	}

@@ -9,6 +9,7 @@ import cn.harry12800.common.core.model.ResultCode;
 import cn.harry12800.common.module.chat.response.ChatResponse;
 import cn.harry12800.common.module.chat.response.ChatType;
 import cn.harry12800.lnk.client.ClientExportPanel;
+import cn.harry12800.tools.DateUtils;
 
 @Component
 public class ChatHandlerImpl implements ChatHandler{
@@ -30,9 +31,9 @@ public class ChatHandlerImpl implements ChatHandler{
 	@Override
 	public void privateChat(int resultCode, byte[] data) {
 		if(resultCode == ResultCode.SUCCESS){
-			swingclient.getTips().setText("发送成功");
+			ClientExportPanel.instance.showNotify("发送成功");
 		}else{
-			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+			ClientExportPanel.instance.showNotify(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 
@@ -61,7 +62,7 @@ public class ChatHandlerImpl implements ChatHandler{
 				builder.append("[");
 				builder.append(chatResponse.getTartgetPlayerName());
 				builder.append("]");
-				builder.append(" 说:\n\t");
+				builder.append(" 说:\n（"+DateUtils.getCurrTimeByFormat("yyyy-MM-dd HH:mm")+"）\t");
 				builder.append(chatResponse.getMessage());
 				builder.append("\n\n");
 			}else{
@@ -69,7 +70,7 @@ public class ChatHandlerImpl implements ChatHandler{
 				builder.append("[");
 				builder.append(chatResponse.getSendPlayerId());
 				builder.append("]");
-				builder.append(" 悄悄对你说:\n\t");
+				builder.append(" 悄悄对你说:\n（"+DateUtils.getCurrTimeByFormat("yyyy-MM-dd HH:mm")+"）\t");
 				builder.append(chatResponse.getMessage());
 				builder.append("\n\n");
 			}

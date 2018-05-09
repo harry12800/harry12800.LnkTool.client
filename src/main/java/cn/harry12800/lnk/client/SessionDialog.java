@@ -81,6 +81,10 @@ public class SessionDialog extends JDialog{
 
 	public void showMsg(String msg) {
 		String text = sessionPanel.areaTextPanel.getText();
-		sessionPanel.areaTextPanel.setText(text+msg+"\r\n");
+		sessionPanel.areaTextPanel.setText(text+"\r\n"+msg+"\r\n");
+	}
+
+	public void showNotify(String tipContent) {
+		sessionPanel.notifyLabel.setText( tipContent);
 	}
 }
