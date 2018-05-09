@@ -34,6 +34,7 @@ import cn.harry12800.common.module.chat.ChatCmd;
 import cn.harry12800.common.module.chat.request.PrivateChatRequest;
 import cn.harry12800.common.module.player.PlayerCmd;
 import cn.harry12800.common.module.player.request.LoginRequest;
+import cn.harry12800.common.module.player.request.PullMsgRequest;
 import cn.harry12800.common.module.player.request.ShowAllPlayerRequest;
 import cn.harry12800.j2se.component.ClickAction;
 import cn.harry12800.j2se.component.InputText;
@@ -59,16 +60,13 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	 */
 	private static final long serialVersionUID = 1L;
 	private int width = 350;
-	List<ClientConnectionParam> exports;
 	public static ClientExportPanel instance;
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
-	public Context context;
 	public ListPanel<UserInfo> listPanel;
 	MButton loginBtn = new MButton("登录", 80, 25);
-	MButton udptcp = new MButton("UDP", 80, 25);
-	JLabel msgLabel = new JLabel("tsihsi");
+	MButton udptcp = new MButton("局域网方式", 80, 25);
+	JLabel msgLabel = new JLabel("");
 	ImageBtn setBtn= new ImageBtn(ImageUtils.getByName("post.png"));
-	public List<Letter> letters;
 	InputText userNameInput;
 	InputText passInput;
 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -80,39 +78,25 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	public ClientExportPanel(Context context) throws Exception {
 		super(context);
 		client = applicationContext.getBean(Client.class);
-		try {
-			this.context = context;
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
 		instance = this;
 		setBackground(UI.backColor);
 		setLayout(null);
-		this.letters = Lists.newArrayList();
+		this.userList = Lists.newArrayList();
 		//		new DragListener(this);
 		this.listPanel = new ListPanel<UserInfo>();
 		listPanel.setBounds(0, 0, width, 6 * 32 + 170);
 		addText();
-		JScrollPane a = new JScrollPane(listPanel) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void paintComponent(Graphics g) {
-				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.drawImage(ImageUtils.getByName("music1.jpg"), 0, 0, getWidth() - 1, getHeight() - 1, null);
-				g2d.dispose();
-			}
-		};
-		a.setOpaque(false);
-		a.getViewport().setOpaque(false);
-		a.getVerticalScrollBar().setBackground(UI.backColor);
+		JScrollPane scrollPane = new JScrollPane(listPanel) ;
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.getVerticalScrollBar().setBackground(UI.backColor);
 		MyScrollBarUI myScrollBarUI = new MyScrollBarUI();
-		a.getVerticalScrollBar().setUnitIncrement(20);
-		a.getVerticalScrollBar().setUI(myScrollBarUI);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		scrollPane.getVerticalScrollBar().setUI(myScrollBarUI);
 		// 屏蔽横向滚动条
-		a.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		a.setBounds(0, 0, width, 6 * 32 + 170);
-		add(a);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(0, 0, width, 6 * 32 + 170);
+		add(scrollPane);
 		loginBtn.setBounds(270, 6 * 32 + 250 - 70, 80, 25);
 		setBtn.setBounds(300, 6 * 32 + 250 - 30, 80, 25);
 		udptcp.setBounds(205, 6 * 32 + 250 - 30, 80, 25);
@@ -173,6 +157,15 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 			}
 		});
+		userNameInput.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == 10) {
+					sendLogin();
+					refreshIP();
+				}
+			}
+		});
 		passInput.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -190,6 +183,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			loginRequest.setPlayerName(userNameInput.getText());
 			loginRequest.setPassward(passInput.getText());
 			self = new UserInfo(userNameInput.getText(), "", "");
+			self.setToken(passInput.getText());
 			//构建请求
 			Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
 			client.sendRequest(request);
@@ -243,6 +237,19 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			listPanel.addItem(itemPanel);
 		}
 		revalidate();
+		pullMsg();
+	}
+
+	private void pullMsg() {
+		try {
+			PullMsgRequest request = new PullMsgRequest();
+			request.setUserid(Long.valueOf(self.getId()));
+			//构建请求
+			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.PULL_MSG, request.getBytes());
+			client.sendRequest(request1);
+		} catch (Exception e) {
+			//			tips.setText("无法连接服务器");
+		}
 	}
 
 	public void sendMsg(UserInfo letter, String content) {

@@ -87,4 +87,9 @@ public class SessionDialog extends JDialog{
 	public void showNotify(String tipContent) {
 		sessionPanel.notifyLabel.setText( tipContent);
 	}
+	@Override
+	public void requestFocus() {
+		super.requestFocus();
+		sessionPanel.areaTextPanel1.requestFocus();
+	}
 }
