@@ -10,10 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -42,7 +44,7 @@ import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.Letter;
 import cn.harry12800.j2se.tip.ListPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
-import cn.harry12800.lnk.client.entity.ClientInfo;
+import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.Lists;
 
 @FunctionPanelModel(configPath = "client", height = 6 * 32 + 250, width = 350, defaultDisplay = true, backgroundImage = "client_back.jpg", headerImage = "teminal.png", desc = "多端操作。")
@@ -57,7 +59,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	public static ClientExportPanel instance;
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
 	public Context context;
-	public ListPanel<ClientInfo> listPanel;
+	public ListPanel<UserInfo> listPanel;
 	MButton refresh = new MButton("登录", 80, 25);
 	MButton set = new MButton("设置MAC地址", 80, 25);
 	MButton udptcp = new MButton("UDP", 80, 25);
@@ -65,10 +67,11 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	InputText userNameInput;
 	InputText passInput;
 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-	Client client = null;
 	private SessionDialog sessionDialog;
-	private List<ClientInfo> userList;
-
+	Client client = null;
+	UserInfo self = null;
+	private List<UserInfo> userList;
+	static Map<UserInfo,SessionDialog>  mapsDialogByUser = new HashedMap();
 	public ClientExportPanel(Context context) {
 		super(context);
 		client = applicationContext.getBean(Client.class);
@@ -82,7 +85,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		setLayout(null);
 		this.letters = Lists.newArrayList();
 		//		new DragListener(this);
-		this.listPanel = new ListPanel<ClientInfo>();
+		this.listPanel = new ListPanel<UserInfo>();
 		listPanel.setBounds(0, 0, width, 6 * 32 + 170);
 		addText();
 		JScrollPane a = new JScrollPane(listPanel) {
@@ -151,9 +154,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 			}
 		});
-		listPanel.addCallBack(new ListCallBack<ClientInfo>() {
+		listPanel.addCallBack(new ListCallBack<UserInfo>() {
 			@Override
-			public void item(ItemPanel<ClientInfo> itemPanel, ClientInfo letter) {
+			public void item(ItemPanel<UserInfo> itemPanel, UserInfo letter) {
 				ClientExportPanel.this.sessionDialog.setClientInfo(letter);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 			}
@@ -166,6 +169,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			LoginRequest loginRequest = new LoginRequest();
 			loginRequest.setPlayerName(userNameInput.getText());
 			loginRequest.setPassward(passInput.getText());
+			self = new UserInfo(userNameInput.getText(), "", "");
 			//构建请求
 			Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
 			client.sendRequest(request);
@@ -205,21 +209,24 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 	}
 
-	public void showUser(List<ClientInfo> lists) {
+	public void showUser(List<UserInfo> lists) {
 		this.userList = lists;
-		for (ClientInfo clientInfo : lists) {
+		for (UserInfo clientInfo : lists) {
 			System.out.println(clientInfo);
-			ItemPanel<ClientInfo> itemPanel = new ItemPanel<ClientInfo>(clientInfo);
+			if(self.getTitle().equals(clientInfo.getTitle())){
+				continue;
+			};
+			ItemPanel<UserInfo> itemPanel = new ItemPanel<UserInfo>(clientInfo);
 			itemPanel.setListPanel(listPanel);
 			listPanel.addItem(itemPanel);
 		}
 		revalidate();
 	}
 
-	public void sendMsg(ClientInfo letter, String content) {
+	public void sendMsg(UserInfo letter, String content) {
 		try {
 			PrivateChatRequest request = new PrivateChatRequest();
-			request.setContext("asdfa");
+			request.setContext(content);
 			request.setTargetPlayerId(Long.valueOf(letter.getContent()));
 			//构建请求
 			Request request1 = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
@@ -230,7 +237,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	}
 
 	public void showMsg(long sendPlayerId, String msg) {
-		for (ClientInfo clientInfo : userList) {
+		for (UserInfo clientInfo : userList) {
 			if(clientInfo.getContent().equals(""+sendPlayerId)){
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);

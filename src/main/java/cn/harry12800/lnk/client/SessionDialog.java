@@ -8,23 +8,26 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
-import cn.harry12800.j2se.component.BaseWindow;
+import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.lnk.client.SessionPanel.SendEvent;
-import cn.harry12800.lnk.client.entity.ClientInfo;
+import cn.harry12800.lnk.client.entity.UserInfo;
 
-public class SessionDialog extends BaseWindow {
+public class SessionDialog extends JDialog{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3402650173117339424L;
 	public static SessionDialog instance;
-	private ClientInfo letter;
+	private UserInfo letter;
 	private SessionPanel sessionPanel;
 
 	public SessionDialog() {
+		setUndecorated(true);
+		new DragListener(this);
 		setLayout(new BorderLayout(0, 0));
 		getLayeredPane().setOpaque(false);
 		getRootPane().setOpaque(false);
@@ -66,7 +69,7 @@ public class SessionDialog extends BaseWindow {
 		new SessionDialog();
 	}
 
-	public void setClientInfo(ClientInfo letter) {
+	public void setClientInfo(UserInfo letter) {
 		this.letter = letter;
 		sessionPanel.setTitle(letter.getTitle());
 		sessionPanel.addSendEvent(new SendEvent() {
@@ -77,6 +80,7 @@ public class SessionDialog extends BaseWindow {
 	}
 
 	public void showMsg(String msg) {
-		sessionPanel.areaTextPanel.setText(msg);
+		String text = sessionPanel.areaTextPanel.getText();
+		sessionPanel.areaTextPanel.setText(text+"\r\n"+msg);
 	}
 }

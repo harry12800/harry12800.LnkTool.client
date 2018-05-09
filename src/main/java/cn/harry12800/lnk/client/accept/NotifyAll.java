@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import cn.harry12800.lnk.client.Config;
-import cn.harry12800.lnk.client.entity.ClientInfo;
+import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.lnk.client.udp.ClientUtil;
 
 /**
@@ -28,7 +28,7 @@ public class NotifyAll extends Thread {
 	 * @author harry12800
 	 */
 	public interface NotifyCallback {
-		public void notifyClientinfo(ClientInfo clientinfo);
+		public void notifyClientinfo(UserInfo clientinfo);
 	}
 
 	private NotifyCallback callback;
@@ -73,7 +73,7 @@ public class NotifyAll extends Thread {
 			String string = new String(packet.getData(), 0, packet.getLength());
 			String[] split = string.split(":");
 			InetSocketAddress socketAddress = (InetSocketAddress) packet.getSocketAddress();
-			ClientInfo letter = new ClientInfo(split[0], split[1], socketAddress.getAddress().getHostAddress());
+			UserInfo letter = new UserInfo(split[0], split[1], socketAddress.getAddress().getHostAddress());
 			callback.notifyClientinfo(letter);
 			System.err.println(rcvd);
 		}

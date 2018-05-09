@@ -10,7 +10,7 @@ import cn.harry12800.common.core.model.ResultCode;
 import cn.harry12800.common.module.player.response.PlayerResponse;
 import cn.harry12800.common.module.player.response.ShowAllPlayerResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
-import cn.harry12800.lnk.client.entity.ClientInfo;
+import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.Lists;
 /**
  * 玩家模块
@@ -57,10 +57,10 @@ public class PlayerHandlerImpl implements PlayerHandler{
 			ShowAllPlayerResponse response = new ShowAllPlayerResponse();
 			response.readFromBytes(data);
 			List<PlayerResponse> players = response.getPlayers();
-			List<ClientInfo> lists = Lists.newArrayList();
+			List<UserInfo> lists = Lists.newArrayList();
 			System.out.println(players.size());
 			for (PlayerResponse playerResponse2 : players) {
-				ClientInfo c = new ClientInfo(playerResponse2.getPlayerName(), playerResponse2.getPlayerId()+"", "");
+				UserInfo c = new UserInfo(playerResponse2.getPlayerName(), playerResponse2.getPlayerId()+"", "");
 				lists.add(c);
 			}
 			ClientExportPanel.instance.showUser(lists);

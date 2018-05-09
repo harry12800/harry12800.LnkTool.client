@@ -2,13 +2,13 @@ package cn.harry12800.lnk.client.entity;
 
 import cn.harry12800.j2se.tip.Letter;
 
-public class ClientInfo extends Letter {
+public class UserInfo extends Letter {
 
 	private String name;
 	private String ip;
 	private String mac;
 
-	public ClientInfo(String name, String mac, String ip) {
+	public UserInfo(String name, String mac, String ip) {
 		super(name, mac, ip);
 		this.ip = ip;
 		this.name = name;
