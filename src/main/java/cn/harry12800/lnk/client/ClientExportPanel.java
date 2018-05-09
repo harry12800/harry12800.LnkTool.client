@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -150,6 +152,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	private void initBtnListener() {
 		loginBtn.addMouseListener(new ClickAction(loginBtn) {
 			public void leftClick(MouseEvent e) {
+				sendLogin();
 				refreshIP();
 			}
 		});
@@ -170,7 +173,15 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 			}
 		});
-
+		passInput.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == 10) {
+					sendLogin();
+					refreshIP();
+				}
+			}
+		});
 	}
 
 	private void sendLogin() {
@@ -190,7 +201,6 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	}
 
 	protected void refreshIP() {
-		sendLogin();
 		try {
 			ShowAllPlayerRequest request = new ShowAllPlayerRequest();
 			//构建请求
@@ -222,6 +232,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 	public void showUser(List<UserInfo> lists) {
 		this.userList = lists;
+		listPanel.removeAll();
 		for (UserInfo clientInfo : lists) {
 			System.out.println(clientInfo);
 			if(self.getTitle().equals(clientInfo.getTitle())){
