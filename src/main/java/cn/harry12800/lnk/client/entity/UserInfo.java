@@ -14,6 +14,12 @@ public class UserInfo extends Letter {
 	private String ip;
 	private String clientType;
 	private String mac;
+	private String token;
+
+	
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	public UserInfo(String name, String mac, String ip) {
 		super(name, mac, ip);
@@ -60,6 +66,10 @@ public class UserInfo extends Letter {
 
 	public void setMac(String mac) {
 		this.mac = mac;
+	}
+
+	public String getToken() {
+		return token;
 	}
 	
 }

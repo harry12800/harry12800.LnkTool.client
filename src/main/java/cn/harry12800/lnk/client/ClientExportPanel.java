@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
@@ -37,6 +38,7 @@ import cn.harry12800.j2se.component.InputText;
 import cn.harry12800.j2se.component.MButton;
 import cn.harry12800.j2se.component.TextLabel;
 import cn.harry12800.j2se.component.TextLabel.Builder;
+import cn.harry12800.j2se.component.btn.ImageBtn;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;
 import cn.harry12800.j2se.style.MyScrollBarUI;
 import cn.harry12800.j2se.style.UI;
@@ -61,8 +63,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	public Context context;
 	public ListPanel<UserInfo> listPanel;
 	MButton loginBtn = new MButton("登录", 80, 25);
-	MButton set = new MButton("设置MAC地址", 80, 25);
 	MButton udptcp = new MButton("UDP", 80, 25);
+	JLabel msgLabel = new JLabel("tsihsi");
+	ImageBtn setBtn= new ImageBtn(ImageUtils.getByName("post.png"));
 	public List<Letter> letters;
 	InputText userNameInput;
 	InputText passInput;
@@ -72,7 +75,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	UserInfo self = null;
 	private List<UserInfo> userList;
 	static Map<UserInfo,SessionDialog>  mapsDialogByUser = new HashMap<UserInfo,SessionDialog>(0);
-	public ClientExportPanel(Context context) {
+	public ClientExportPanel(Context context) throws Exception {
 		super(context);
 		client = applicationContext.getBean(Client.class);
 		try {
@@ -109,25 +112,31 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		a.setBounds(0, 0, width, 6 * 32 + 170);
 		add(a);
 		loginBtn.setBounds(270, 6 * 32 + 250 - 70, 80, 25);
-		set.setBounds(105, 6 * 32 + 250 - 30, 80, 25);
+		setBtn.setBounds(300, 6 * 32 + 250 - 30, 80, 25);
 		udptcp.setBounds(205, 6 * 32 + 250 - 30, 80, 25);
+		msgLabel.setBounds(5,  6 * 32 + 250 - 30 , 200, 25);
 		add(loginBtn);
 		add(udptcp);
-		add(set);
+		add(setBtn);
+		add(msgLabel);
 		setSize(width, 6 * 32 + 250);
 		initBtnListener();
 		this.sessionDialog = new SessionDialog();
 		this.addWindow(sessionDialog);
 	}
 
-	private void addText() {
+	private void addText() throws Exception {
 		userNameInput = new InputText(30);
-		userNameInput.setText("周国柱");
+		
 		Builder a = new Builder();
 		TextLabel userName = new TextLabel("用户名", 50, 30, a);
 		TextLabel pass = new TextLabel("密  码", 50, 30, a);
 		passInput = new InputText(30);
-		passInput.setText("123456");
+		UserInfo self2 = getConfigObject().getSelf();
+		if(self2!=null) {
+			userNameInput.setText(self2.getName());
+			passInput.setText(self2.getToken());
+		}
 		add(userNameInput);
 		add(passInput);
 		add(userName);
@@ -149,7 +158,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 			}
 		});
-		set.addMouseListener(new ClickAction(set) {
+		setBtn.addMouseListener(new ClickAction(setBtn) {
 			public void leftClick(MouseEvent e) {
 
 			}
@@ -173,6 +182,8 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			//构建请求
 			Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
 			client.sendRequest(request);
+			getConfigObject().setSelf(self);
+			saveConfigObject();
 		} catch (Exception e) {
 			//			tips.setText("无法连接服务器");
 		}
@@ -249,5 +260,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 	public void showNotify(String tipContent) {
 		ClientExportPanel.this.sessionDialog.showNotify(tipContent);
+	}
+
+	public void showLoginMsg(String tipContent) {
+		msgLabel.setText(tipContent);
 	}
 }
