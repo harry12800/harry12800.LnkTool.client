@@ -35,4 +35,11 @@ public interface PlayerHandler {
 	 */
 	@SocketCommand(cmd = PlayerCmd.SHOW_ALL_USER)
 	public void showAllUser(int resultCode, byte[] data);
+	/**
+	 * 创建并登录帐号
+	 * @param resultCode
+	 * @param data {@link null}
+	 */
+	@SocketCommand(cmd = PlayerCmd.PULL_MSG)
+	public void pullMsg(int resultCode, byte[] data);
 }

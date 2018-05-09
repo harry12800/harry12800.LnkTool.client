@@ -26,6 +26,7 @@ public class UserInfo extends Letter {
 		this.ip = ip;
 		this.name = name;
 		this.mac = mac;
+		this.id=mac;
 	}
 
 	public String getId() {

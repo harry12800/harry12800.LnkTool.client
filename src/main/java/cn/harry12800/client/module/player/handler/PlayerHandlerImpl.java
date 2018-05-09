@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import cn.harry12800.client.swing.ResultCodeTip;
 import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.ResultCode;
+import cn.harry12800.common.module.player.response.MsgResponse;
 import cn.harry12800.common.module.player.response.PlayerResponse;
+import cn.harry12800.common.module.player.response.PullMsgResponse;
 import cn.harry12800.common.module.player.response.ShowAllPlayerResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.entity.UserInfo;
@@ -58,12 +60,27 @@ public class PlayerHandlerImpl implements PlayerHandler{
 			response.readFromBytes(data);
 			List<PlayerResponse> players = response.getPlayers();
 			List<UserInfo> lists = Lists.newArrayList();
-			System.out.println(players.size());
 			for (PlayerResponse playerResponse2 : players) {
 				UserInfo c = new UserInfo(playerResponse2.getPlayerName(), playerResponse2.getPlayerId()+"", "");
 				lists.add(c);
 			}
 			ClientExportPanel.instance.showUser(lists);
+		}else{
+			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+		}
+	}
+
+	@Override
+	public void pullMsg(int resultCode, byte[] data) {
+		if(resultCode == ResultCode.SUCCESS) {
+			PullMsgResponse response = new PullMsgResponse();
+			response.readFromBytes(data);
+			 List<MsgResponse> msgs = response.getMsgs();
+			try {
+				ClientExportPanel.instance.showPullMsg(msgs);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}else{
 			System.out.println("resultCode?");
 			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));

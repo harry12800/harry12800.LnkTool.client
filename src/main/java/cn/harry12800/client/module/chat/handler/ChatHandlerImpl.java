@@ -74,7 +74,11 @@ public class ChatHandlerImpl implements ChatHandler{
 				builder.append(chatResponse.getMessage());
 				builder.append("\n\n");
 			}
-			ClientExportPanel.instance.showMsg(chatResponse.getSendPlayerId(),builder.toString());
+			try {
+				ClientExportPanel.instance.showMsg(chatResponse.getSendPlayerId(),builder.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			swingclient.getChatContext().append(builder.toString());
 		}
 	}

@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -15,6 +16,7 @@ import cn.harry12800.Lnk.core.util.ImageUtils;
 import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.lnk.client.SessionPanel.SendEvent;
 import cn.harry12800.lnk.client.entity.UserInfo;
+import cn.harry12800.tools.DateUtils;
 
 public class SessionDialog extends JDialog{
 	/**
@@ -69,14 +71,32 @@ public class SessionDialog extends JDialog{
 		new SessionDialog();
 	}
 
-	public void setClientInfo(UserInfo letter) {
+	public void setClientInfo(UserInfo letter) throws Exception {
 		this.letter = letter;
+		List<Msg> list = ClientExportPanel.instance.getConfigObject().getMaps().get(letter.getId());
+		String info = appendInfo(list);
 		sessionPanel.setTitle(letter.getTitle());
+		sessionPanel.areaTextPanel.setText(info);
 		sessionPanel.addSendEvent(new SendEvent() {
 			public void send(String content) {
 				ClientExportPanel.instance.sendMsg(letter,content);
 			}
 		});
+	}
+
+	private String appendInfo(List<Msg> list) {
+		StringBuilder builder = new StringBuilder();
+		if(list == null) return "";
+		for (Msg m : list) {
+			builder.append(m.getFromPlayerId());
+			builder.append("[");
+			builder.append(m.getToPlayerId());
+			builder.append("]");
+			builder.append(" 悄悄对你说:\n（"+DateUtils.getTimeByFormat(m.getSendTime(),"yyyy-MM-dd HH:mm")+"）\t");
+			builder.append(new String(m.getData()));
+			builder.append("\n\n");
+		}
+		return builder.toString();
 	}
 
 	public void showMsg(String msg) {

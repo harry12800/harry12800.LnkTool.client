@@ -36,6 +36,7 @@ import cn.harry12800.common.module.player.PlayerCmd;
 import cn.harry12800.common.module.player.request.LoginRequest;
 import cn.harry12800.common.module.player.request.PullMsgRequest;
 import cn.harry12800.common.module.player.request.ShowAllPlayerRequest;
+import cn.harry12800.common.module.player.response.MsgResponse;
 import cn.harry12800.j2se.component.ClickAction;
 import cn.harry12800.j2se.component.InputText;
 import cn.harry12800.j2se.component.MButton;
@@ -46,7 +47,6 @@ import cn.harry12800.j2se.component.panel.AreaTextPanel;
 import cn.harry12800.j2se.style.MyScrollBarUI;
 import cn.harry12800.j2se.style.UI;
 import cn.harry12800.j2se.tip.ItemPanel;
-import cn.harry12800.j2se.tip.Letter;
 import cn.harry12800.j2se.tip.ListPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
 import cn.harry12800.lnk.client.entity.UserInfo;
@@ -66,7 +66,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	MButton loginBtn = new MButton("登录", 80, 25);
 	MButton udptcp = new MButton("局域网方式", 80, 25);
 	JLabel msgLabel = new JLabel("");
-	ImageBtn setBtn= new ImageBtn(ImageUtils.getByName("post.png"));
+	ImageBtn setBtn = new ImageBtn(ImageUtils.getByName("post.png"));
 	InputText userNameInput;
 	InputText passInput;
 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -74,7 +74,8 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	Client client = null;
 	UserInfo self = null;
 	private List<UserInfo> userList;
-	static Map<UserInfo,SessionDialog>  mapsDialogByUser = new HashMap<UserInfo,SessionDialog>(0);
+	static Map<UserInfo, SessionDialog> mapsDialogByUser = new HashMap<UserInfo, SessionDialog>(0);
+
 	public ClientExportPanel(Context context) throws Exception {
 		super(context);
 		client = applicationContext.getBean(Client.class);
@@ -86,7 +87,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		this.listPanel = new ListPanel<UserInfo>();
 		listPanel.setBounds(0, 0, width, 6 * 32 + 170);
 		addText();
-		JScrollPane scrollPane = new JScrollPane(listPanel) ;
+		JScrollPane scrollPane = new JScrollPane(listPanel);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.getVerticalScrollBar().setBackground(UI.backColor);
@@ -100,7 +101,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		loginBtn.setBounds(270, 6 * 32 + 250 - 70, 80, 25);
 		setBtn.setBounds(300, 6 * 32 + 250 - 30, 80, 25);
 		udptcp.setBounds(205, 6 * 32 + 250 - 30, 80, 25);
-		msgLabel.setBounds(5,  6 * 32 + 250 - 30 , 200, 25);
+		msgLabel.setBounds(5, 6 * 32 + 250 - 30, 200, 25);
 		add(loginBtn);
 		add(udptcp);
 		add(setBtn);
@@ -113,13 +114,13 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 	private void addText() throws Exception {
 		userNameInput = new InputText(30);
-		
+
 		Builder a = new Builder();
 		TextLabel userName = new TextLabel("用户名", 50, 30, a);
 		TextLabel pass = new TextLabel("密  码", 50, 30, a);
 		passInput = new InputText(30);
 		UserInfo self2 = getConfigObject().getSelf();
-		if(self2!=null) {
+		if (self2 != null) {
 			userNameInput.setText(self2.getName());
 			passInput.setText(self2.getToken());
 		}
@@ -153,7 +154,11 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		listPanel.addCallBack(new ListCallBack<UserInfo>() {
 			@Override
 			public void item(ItemPanel<UserInfo> itemPanel, UserInfo letter) {
-				ClientExportPanel.this.sessionDialog.setClientInfo(letter);
+				try {
+					ClientExportPanel.this.sessionDialog.setClientInfo(letter);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 			}
 		});
@@ -229,9 +234,10 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		listPanel.removeAll();
 		for (UserInfo clientInfo : lists) {
 			System.out.println(clientInfo);
-			if(self.getTitle().equals(clientInfo.getTitle())){
+			if (self.getTitle().equals(clientInfo.getTitle())) {
+				self.setId(clientInfo.getId());
 				continue;
-			};
+			}
 			ItemPanel<UserInfo> itemPanel = new ItemPanel<UserInfo>(clientInfo);
 			itemPanel.setListPanel(listPanel);
 			listPanel.addItem(itemPanel);
@@ -247,7 +253,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			//构建请求
 			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.PULL_MSG, request.getBytes());
 			client.sendRequest(request1);
+			System.out.println("主动拉取信息");
 		} catch (Exception e) {
+			e.printStackTrace();
 			//			tips.setText("无法连接服务器");
 		}
 	}
@@ -265,9 +273,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		}
 	}
 
-	public void showMsg(long sendPlayerId, String msg) {
+	public void showMsg(long sendPlayerId, String msg) throws Exception {
 		for (UserInfo clientInfo : userList) {
-			if(clientInfo.getContent().equals(""+sendPlayerId)){
+			if (clientInfo.getContent().equals("" + sendPlayerId)) {
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();
@@ -282,5 +290,25 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 
 	public void showLoginMsg(String tipContent) {
 		msgLabel.setText(tipContent);
+	}
+
+	
+	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
+		for (MsgResponse msgResponse : msgs) {
+			System.err.println(msgResponse);
+			for (UserInfo userInfo : userList) {
+				if((msgResponse.getFromPlayerId()+"").equals( userInfo.getId())) {
+					List<Msg> list = data.getMaps().get(userInfo.getId());
+					if(list == null) {
+						List<Msg> newArrayList = Lists.newArrayList();
+						newArrayList.add(new Msg(msgResponse));
+						data.getMaps().put(userInfo.getId(), newArrayList);
+					}else {
+						data.getMaps().get(userInfo.getId()).add(new Msg(msgResponse));
+					}
+				}
+			}
+		}
+		saveConfigObject();
 	}
 }
