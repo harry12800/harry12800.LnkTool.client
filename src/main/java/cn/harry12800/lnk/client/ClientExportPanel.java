@@ -199,10 +199,6 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		this.userList = lists;
 		listPanel.removeAll();
 		for (UserInfo clientInfo : lists) {
-			System.out.println(clientInfo);
-			System.out.println(clientInfo.getName());
-			System.out.println(data);
-			System.out.println(data.getSelf());
 			if (clientInfo.getName().equals(data.getSelf().getName())) {
 				data.getSelf().setId(clientInfo.getId());
 				continue;
@@ -295,7 +291,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	public void showReceiveMsg(MsgResponse msg) {
 		for (UserInfo clientInfo : userList) {
-			if (clientInfo.getContent().equals("" + msg.getFromPlayerId())) {
+			if (clientInfo.getContent().equals("" + msg.getToPlayerId())) {
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();

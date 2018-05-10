@@ -8,7 +8,12 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.util.Properties;
+
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +43,8 @@ public class Client {
 	 */
 	Bootstrap bootstrap = new Bootstrap();
 
+	Properties p  = new Properties();
+	
 	/**
 	 * 会话
 	 */
@@ -53,7 +60,11 @@ public class Client {
 	 */
 	@PostConstruct
 	public void init() {
-		
+		try(InputStream stream = Client.class.getResourceAsStream("/client.properties");){
+			p.load(stream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// 设置循环线程组事例
 		bootstrap.group(workerGroup);
 		// 设置channel工厂
@@ -78,7 +89,6 @@ public class Client {
 	 * @throws InterruptedException
 	 */
 	public void connect() throws InterruptedException {
-
 		// 连接服务端
 		ChannelFuture connect = bootstrap.connect(new InetSocketAddress("127.0.0.1", 10000));
 		connect.sync();
