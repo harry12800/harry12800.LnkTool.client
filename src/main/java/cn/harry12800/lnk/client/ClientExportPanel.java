@@ -303,14 +303,17 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	private void hotKey() {
 		try{
-			JIntellitype.getInstance().registerHotKey(105, JIntellitype.MOD_ALT, (int) 'N');
+			JIntellitype.getInstance().registerHotKey(105, JIntellitype.MOD_ALT, (int) '2');
 			JIntellitype.getInstance().addHotKeyListener(new HotkeyListener() {
 				public void onHotKey(int key) {
 					if (key == 105) { // 你要做的事
 						if (ClientExportPanel.instance.sessionDialog.isVisible())
 							ClientExportPanel.instance.sessionDialog.dispose();
 						else
+						{
 							ClientExportPanel.instance.sessionDialog.setVisible(true);
+							ClientExportPanel.instance.sessionDialog.requestFocus();
+						}
 					}
 				}
 			});
