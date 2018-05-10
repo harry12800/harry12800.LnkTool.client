@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -13,6 +14,9 @@ import javax.swing.ScrollPaneConstants;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.melloware.jintellitype.HotkeyListener;
+import com.melloware.jintellitype.JIntellitype;
 
 import cn.harry12800.Lnk.core.Context;
 import cn.harry12800.Lnk.core.CorePanel;
@@ -66,7 +70,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	Client client = null;
 	private List<UserInfo> userList;
 	static Map<UserInfo, SessionDialog> mapsDialogByUser = new HashMap<UserInfo, SessionDialog>(0);
-	static Map<String, UserInfo> mapsUserByUserid= new HashMap<String, UserInfo>(0);
+	static Map<Long, UserInfo> mapsUserByUserid = new HashMap<Long, UserInfo>(0);
 
 	public ClientExportPanel(Context context) throws Exception {
 		super(context);
@@ -102,6 +106,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		initBtnListener();
 		this.sessionDialog = new SessionDialog();
 		this.addWindow(sessionDialog);
+		hotKey();
 	}
 
 	private void addText() throws Exception {
@@ -245,20 +250,20 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	public void showLoginMsg(String tipContent) {
 		msgLabel.setText(tipContent);
 	}
-	
+
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
 		for (MsgResponse msgResponse : msgs) {
-//			System.err.println(msgResponse);
+			//			System.err.println(msgResponse);
 			for (UserInfo userInfo : userList) {
-//				System.out.println(userInfo);
-				if( msgResponse.getFromPlayerId()== userInfo.getId()
-						||msgResponse.getToPlayerId()== userInfo.getId()) {
-					List<Msg> list = getData().getMaps().get(userInfo.getId());
-					if(list == null) {
-						List<Msg> newArrayList = Lists.newArrayList();
+				//				System.out.println(userInfo);
+				if (msgResponse.getFromPlayerId() == userInfo.getId()
+						|| msgResponse.getToPlayerId() == userInfo.getId()) {
+					ConcurrentLinkedQueue<Msg> linkedHashSet = getData().getMaps().get(userInfo.getId());
+					if (linkedHashSet == null) {
+						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
 						newArrayList.add(new Msg(msgResponse));
 						getData().getMaps().put(userInfo.getId(), newArrayList);
-					}else {
+					} else {
 						getData().getMaps().get(userInfo.getId()).add(new Msg(msgResponse));
 					}
 				}
@@ -276,36 +281,61 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void showPrivateChatSuccessNotify(String string, MsgResponse msg) {
-		ClientExportPanel.this.sessionDialog.showNotify(string);
+		for (UserInfo clientInfo : userList) {
+			if (clientInfo.getId() == msg.getToPlayerId()) {
+				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
+				ClientExportPanel.this.sessionDialog.setVisible(true);
+				ClientExportPanel.this.sessionDialog.requestFocus();
+				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(msg);
+			}
+		}
 		Msg e = new Msg(msg);
-		List<Msg> list = data.getMaps().get(msg.getToPlayerId());
-		if(list == null) {
-			List<Msg> value = Lists.newArrayList();
+		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToPlayerId());
+		if (linkedHashSet == null) {
+			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
 			value.add(e);
-			data.getMaps().put(msg.getToPlayerId(), value );
-		}else{
-			 data.getMaps().get(msg.getToPlayerId()).add(e);
+			data.getMaps().put(msg.getToPlayerId(), value);
+		} else {
+			data.getMaps().get(msg.getToPlayerId()).add(e);
 		}
 		saveConfigObject();
 	}
 
+	private void hotKey() {
+		try{
+			JIntellitype.getInstance().registerHotKey(105, JIntellitype.MOD_ALT, (int) 'N');
+			JIntellitype.getInstance().addHotKeyListener(new HotkeyListener() {
+				public void onHotKey(int key) {
+					if (key == 105) { // 你要做的事
+						if (ClientExportPanel.instance.sessionDialog.isVisible())
+							ClientExportPanel.instance.sessionDialog.dispose();
+						else
+							ClientExportPanel.instance.sessionDialog.setVisible(true);
+					}
+				}
+			});
+		}catch(Exception e) {
+			System.out.println("ALT+N 热键失败！" );
+		}
+	}
+
 	public void showReceiveMsg(MsgResponse msg) {
 		for (UserInfo clientInfo : userList) {
-			if (clientInfo.getContent().equals("" + msg.getToPlayerId())) {
+			if (clientInfo.getId() == msg.getFromPlayerId()) {
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();
-				ClientExportPanel.this.sessionDialog.showReceiveMsg(msg);
+				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(msg);
 			}
 		}
 		Msg e = new Msg(msg);
-		List<Msg> list = data.getMaps().get(msg.getToPlayerId());
-		if(list == null) {
-			List<Msg> value = Lists.newArrayList();
+		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToPlayerId());
+		if (linkedHashSet == null) {
+			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
 			value.add(e);
-			data.getMaps().put(msg.getToPlayerId(), value );
-		}else{
-			 data.getMaps().get(msg.getToPlayerId()).add(e);
+			data.getMaps().put(msg.getToPlayerId(), value);
+		} else {
+			data.getMaps().get(msg.getToPlayerId()).add(e);
 		}
 		saveConfigObject();
 	}

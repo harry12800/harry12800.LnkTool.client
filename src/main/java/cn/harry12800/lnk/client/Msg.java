@@ -9,20 +9,28 @@ import cn.harry12800.common.module.player.response.MsgResponse;
 public class Msg {
 	private long id;
 	private long fromPlayerId;
+	private int online;
 	private long toPlayerId;
 	private Date sendTime;
 	private int dataType;
 	private byte[] data;
-	public Msg(MsgResponse msgResponse) {
-		id = msgResponse.getId();
-		fromPlayerId = msgResponse.getFromPlayerId();
-		toPlayerId = msgResponse.getToPlayerId();
-		sendTime = msgResponse.getSendTime();
-		dataType = msgResponse.getDataType();
-		data = msgResponse.getData();
+	public Msg(MsgResponse m) {
+		id = m.getId();
+		fromPlayerId = m.getFromPlayerId();
+		online = m.getOnline();
+		toPlayerId = m.getToPlayerId();
+		sendTime = m.getSendTime();
+		dataType = m.getDataType();
+		data = m.getData();
 	}
 	public Msg(PrivateChatRequest req) {
 		
+	}
+	public int getOnline() {
+		return online;
+	}
+	public void setOnline(int online) {
+		this.online = online;
 	}
 	public Msg(ChatResponse req) {
 	 
@@ -62,6 +70,26 @@ public class Msg {
 	}
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Msg other = (Msg) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 
 }

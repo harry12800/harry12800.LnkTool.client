@@ -57,8 +57,6 @@ public class SessionPanel extends JPanel implements KeyListener {
 		areaTextPanel.setPreferredSize(new Dimension(500, 250));
 		areaTextPanel1.setSize(500, 50);
 		areaTextPanel1.setPreferredSize(new Dimension(500, 50));
-		//		OkBtn.bgcolor = UI.foreColor;
-		//		OkBtn1.bgcolor = UI.foreColor;
 	}
 
 	private void initCompListener() {
@@ -78,6 +76,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 			public void actionPerformed(ActionEvent e1) {
 				areaTextPanel1.setText("");
 				areaTextPanel.setText("");
+				dialog.clearChatMsg();
 			}
 		});
 		areaTextPanel1.addKeyListener(this);

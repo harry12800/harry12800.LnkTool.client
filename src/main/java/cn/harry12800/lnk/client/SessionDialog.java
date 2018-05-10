@@ -6,7 +6,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -73,8 +74,8 @@ public class SessionDialog extends JDialog {
 	public void setClientInfo(UserInfo letter) {
 		this.toUser = letter;
 		this.formUser = ClientExportPanel.instance.getData().getSelf();
-		List<Msg> list = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
-		String info = appendChatMsg(list);
+		ConcurrentLinkedQueue<Msg> linkedHashSet = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
+		String info = appendAllChatMsg(linkedHashSet);
 		sessionPanel.setTitle(letter.getTitle());
 		sessionPanel.areaTextPanel.setText(info);
 		sessionPanel.addSendEvent(new SendEvent() {
@@ -84,25 +85,28 @@ public class SessionDialog extends JDialog {
 		});
 	}
 
-	private String appendChatMsg(List<Msg> list) {
-		StringBuilder builder = new StringBuilder();
-
-		if (list == null)
+	private String appendAllChatMsg(ConcurrentLinkedQueue<Msg> linkedHashSet) {
+		if (linkedHashSet == null)
 			return "";
-		for (Msg m : list) {
+		StringBuilder builder = new StringBuilder();
+		for (Msg m : linkedHashSet) {
 			boolean isTo = false;
 			if (m.getFromPlayerId() == toUser.getId())
 				isTo = true;
 			if (isTo) {
+				if (m.getOnline() == 2)
+					builder.append("（收到离线消息）");
 				builder.append(toUser.getName());
 				builder.append("[");
 				builder.append(toUser.getId());
 				builder.append("]");
-				builder.append(" 悄悄对你说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
+				builder.append(" 悄悄对你说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
 				builder.append(new String(m.getData()));
 				builder.append("\n\n");
 			} else {
-				builder.append("你悄悄对[" + toUser.getName() + "]说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
+				if (m.getOnline() == 2)
+					builder.append("（对方离线消息）");
+				builder.append("你悄悄对[" + toUser.getName() + "]说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
 				builder.append(new String(m.getData()));
 				builder.append("\n\n");
 			}
@@ -110,31 +114,32 @@ public class SessionDialog extends JDialog {
 		return builder.toString();
 	}
 
-	public void showReceiveMsg(MsgResponse m) {
+	public void showReceiveNewMsg(MsgResponse m) {
 		StringBuilder builder = new StringBuilder();
-		String text = sessionPanel.areaTextPanel.getText();
-		boolean isTo = true;
+		String text = sessionPanel.areaTextPanel.getText().trim();
+		boolean isTo = false;
 		if (m.getFromPlayerId() == toUser.getId())
-			isTo = false;
+			isTo = true;
 		if (isTo) {
+			if (m.getOnline() == 2)
+				builder.append("（收到离线消息）");
 			builder.append(toUser.getName());
 			builder.append("[");
 			builder.append(toUser.getId());
 			builder.append("]");
-			builder.append(" 悄悄对你说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
+			builder.append(" 悄悄对你说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
 			builder.append(new String(m.getData()));
 			builder.append("\n\n");
 		} else {
-			builder.append("你悄悄对[" + toUser.getName() + "]说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
+			if (m.getOnline() == 2)
+				builder.append("（对方离线消息）");
+			builder.append("你悄悄对[" + toUser.getName() + "]说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
 			builder.append(new String(m.getData()));
 			builder.append("\n\n");
 		}
-		int online = m.getOnline();
-		if(online==2) {
-			sessionPanel.areaTextPanel.setText(text +"\r\n\r\n(对方离线消息)" +builder.toString());
-		}else {
-			sessionPanel.areaTextPanel.setText(text +"\r\n\r\n" +builder.toString());
-		}
+		if(!text.isEmpty())
+			sessionPanel.areaTextPanel.setText(text + "\n\n"+builder.toString());
+		else sessionPanel.areaTextPanel.setText(builder.toString());
 	}
 
 	public void showNotify(String tipContent) {
@@ -145,5 +150,14 @@ public class SessionDialog extends JDialog {
 	public void requestFocus() {
 		super.requestFocus();
 		sessionPanel.areaTextPanel1.requestFocus();
+		sessionPanel.areaTextPanel1.area.setCaretPosition( sessionPanel.areaTextPanel1.area.getDocument().getLength());
+	}
+
+	/**
+	 * 清空本回话好友的本地数据。
+	 */
+	public void clearChatMsg() {
+		ClientExportPanel.instance.getData().getMaps().remove(toUser.getId());
+		ClientExportPanel.instance.saveConfigObject();
 	}
 }

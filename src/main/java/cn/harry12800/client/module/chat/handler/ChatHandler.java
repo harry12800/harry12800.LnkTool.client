@@ -18,7 +18,7 @@ public interface ChatHandler {
 	 * @param data {@link null}
 	 * @return
 	 */
-	@SocketCommand(cmd = ChatCmd.PUBLIC_CHAT)
+	@SocketCommand(cmd = ChatCmd.PUBLIC_CHAT,desc="发送广播消息回包")
 	public void publicChat(int resultCode, byte[] data);
 	
 	/**
@@ -27,7 +27,7 @@ public interface ChatHandler {
 	 * @param data {@link null}
 	 * @return
 	 */
-	@SocketCommand(cmd = ChatCmd.PRIVATE_CHAT)
+	@SocketCommand(cmd = ChatCmd.PRIVATE_CHAT,desc="发送私人消息回包")
 	public void privateChat(int resultCode, byte[] data);
 	
 	/**
@@ -36,6 +36,6 @@ public interface ChatHandler {
 	 * @param data {@link ChatResponse}
 	 * @return
 	 */
-	@SocketCommand(cmd = ChatCmd.PUSHCHAT)
+	@SocketCommand(cmd = ChatCmd.PUSHCHAT,desc="收到推送聊天信息")
 	public void receieveMessage(int resultCode, byte[] data);
 }
