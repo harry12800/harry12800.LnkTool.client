@@ -73,6 +73,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	private SessionDialog sessionDialog;
 	Client client = null;
 	private List<UserInfo> userList;
+	private PrivateChatRequest req;
 	static Map<UserInfo, SessionDialog> mapsDialogByUser = new HashMap<UserInfo, SessionDialog>(0);
 	static Map<String, UserInfo> mapsUserByUserid= new HashMap<String, UserInfo>(0);
 
@@ -137,8 +138,8 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	private void initBtnListener() {
 		loginBtn.addMouseListener(new ClickAction(loginBtn) {
 			public void leftClick(MouseEvent e) {
-				sendLogin();
-				refreshIP();
+				sendLoginRequest();
+				pullUserList();
 			}
 		});
 		udptcp.addMouseListener(new ClickAction(udptcp) {
@@ -166,8 +167,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode() == 10) {
-					sendLogin();
-					refreshIP();
+					sendLoginRequest();
 				}
 			}
 		});
@@ -175,38 +175,33 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode() == 10) {
-					sendLogin();
-					refreshIP();
+					sendLoginRequest();
 				}
 			}
 		});
 	}
 
-	private void sendLogin() {
+	private void sendLoginRequest() {
 		try {
 			LoginRequest loginRequest = new LoginRequest();
 			loginRequest.setPlayerName(userNameInput.getText());
 			loginRequest.setPassward(passInput.getText());
-			UserInfo self = new UserInfo(userNameInput.getText(), "", "");
-			self.setToken(passInput.getText());
 			//构建请求
 			Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
 			client.sendRequest(request);
-			getConfigObject().setSelf(self);
-			saveConfigObject();
 		} catch (Exception e) {
-			//			tips.setText("无法连接服务器");
+			msgLabel.setText("无法连接服务器");
 		}
 	}
 
-	protected void refreshIP() {
+	protected void pullUserList() {
 		try {
 			ShowAllPlayerRequest request = new ShowAllPlayerRequest();
 			//构建请求
 			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.SHOW_ALL_USER, request.getBytes());
 			client.sendRequest(request1);
 		} catch (Exception e) {
-			//			tips.setText("无法连接服务器");
+			msgLabel.setText("无法连接服务器");
 		}
 	}
 
@@ -233,8 +228,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		this.userList = lists;
 		listPanel.removeAll();
 		for (UserInfo clientInfo : lists) {
-			if (clientInfo.getTitle().equals(getData().getSelf().getTitle())) {
-				getData().getSelf().setId(clientInfo.getId());
+			System.out.println(clientInfo);
+			System.out.println(clientInfo.getName());
+			System.out.println(data);
+			System.out.println(data.getSelf());
+			if (clientInfo.getName().equals(data.getSelf().getName())) {
+				data.getSelf().setId(clientInfo.getId());
 				continue;
 			}
 			ItemPanel<UserInfo> itemPanel = new ItemPanel<UserInfo>(clientInfo);
@@ -255,7 +254,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			System.out.println("主动拉取信息");
 		} catch (Exception e) {
 			e.printStackTrace();
-			//			tips.setText("无法连接服务器");
+			msgLabel.setText("无法连接服务器");
 		}
 	}
 
@@ -264,22 +263,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			PrivateChatRequest request = new PrivateChatRequest();
 			request.setContext(content);
 			request.setTargetPlayerId(Long.valueOf(letter.getContent()));
+			this.req  = request;
 			//构建请求
-			Request request1 = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
-			client.sendRequest(request1);
+			Request req = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
+			client.sendRequest(req);
 		} catch (Exception e) {
-			//			tips.setText("无法连接服务器");
-		}
-	}
-
-	public void showMsg(long sendPlayerId, String msg) throws Exception {
-		for (UserInfo clientInfo : userList) {
-			if (clientInfo.getContent().equals("" + sendPlayerId)) {
-				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
-				ClientExportPanel.this.sessionDialog.setVisible(true);
-				ClientExportPanel.this.sessionDialog.requestFocus();
-				ClientExportPanel.this.sessionDialog.showMsg(msg);
-			}
+			msgLabel.setText("无法连接服务器");
 		}
 	}
 
@@ -293,10 +282,11 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
 		for (MsgResponse msgResponse : msgs) {
-			System.err.println(msgResponse);
+//			System.err.println(msgResponse);
 			for (UserInfo userInfo : userList) {
-				if((msgResponse.getFromPlayerId()+"").equals( userInfo.getId())
-						||(msgResponse.getToPlayerId()+"").equals( userInfo.getId())) {
+//				System.out.println(userInfo);
+				if( msgResponse.getFromPlayerId()== userInfo.getId()
+						||msgResponse.getToPlayerId()== userInfo.getId()) {
 					List<Msg> list = getData().getMaps().get(userInfo.getId());
 					if(list == null) {
 						List<Msg> newArrayList = Lists.newArrayList();
@@ -307,6 +297,49 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 					}
 				}
 			}
+		}
+		saveConfigObject();
+	}
+
+	public void loginSuccess(String string) {
+		msgLabel.setText(string);
+		UserInfo self = new UserInfo(userNameInput.getText(), "0", "");
+		self.setToken(passInput.getText());
+		data.setSelf(self);
+		pullUserList();
+	}
+
+	public void showPrivateChatSuccessNotify(String string, MsgResponse msg) {
+		ClientExportPanel.this.sessionDialog.showNotify(string);
+		Msg e = new Msg(msg);
+		List<Msg> list = data.getMaps().get(msg.getToPlayerId());
+		if(list == null) {
+			List<Msg> value = Lists.newArrayList();
+			value.add(e);
+			data.getMaps().put(msg.getToPlayerId(), value );
+		}else{
+			 data.getMaps().get(msg.getToPlayerId()).add(e);
+		}
+		saveConfigObject();
+	}
+
+	public void showReceiveMsg(MsgResponse msg) {
+		for (UserInfo clientInfo : userList) {
+			if (clientInfo.getContent().equals("" + msg.getFromPlayerId())) {
+				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
+				ClientExportPanel.this.sessionDialog.setVisible(true);
+				ClientExportPanel.this.sessionDialog.requestFocus();
+				ClientExportPanel.this.sessionDialog.showReceiveMsg(msg);
+			}
+		}
+		Msg e = new Msg(msg);
+		List<Msg> list = data.getMaps().get(msg.getToPlayerId());
+		if(list == null) {
+			List<Msg> value = Lists.newArrayList();
+			value.add(e);
+			data.getMaps().put(msg.getToPlayerId(), value );
+		}else{
+			 data.getMaps().get(msg.getToPlayerId()).add(e);
 		}
 		saveConfigObject();
 	}

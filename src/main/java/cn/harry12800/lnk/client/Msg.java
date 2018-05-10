@@ -2,6 +2,8 @@ package cn.harry12800.lnk.client;
 
 import java.util.Date;
 
+import cn.harry12800.common.module.chat.request.PrivateChatRequest;
+import cn.harry12800.common.module.chat.response.ChatResponse;
 import cn.harry12800.common.module.player.response.MsgResponse;
 
 public class Msg {
@@ -18,6 +20,12 @@ public class Msg {
 		sendTime = msgResponse.getSendTime();
 		dataType = msgResponse.getDataType();
 		data = msgResponse.getData();
+	}
+	public Msg(PrivateChatRequest req) {
+		
+	}
+	public Msg(ChatResponse req) {
+	 
 	}
 	public long getId() {
 		return id;

@@ -13,12 +13,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
+import cn.harry12800.common.module.player.response.MsgResponse;
 import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.lnk.client.SessionPanel.SendEvent;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.DateUtils;
 
-public class SessionDialog extends JDialog{
+public class SessionDialog extends JDialog {
 	/**
 	 * 
 	 */
@@ -28,7 +29,6 @@ public class SessionDialog extends JDialog{
 	private UserInfo formUser;
 	private SessionPanel sessionPanel;
 
-	 
 	public SessionDialog() {
 		setUndecorated(true);
 		new DragListener(this);
@@ -52,6 +52,7 @@ public class SessionDialog extends JDialog{
 
 	JLabel picture;
 	static final String default_back = "default_back.jpg";
+
 	public void setBackground() {
 		ImageIcon image = new ImageIcon(ImageUtils.getByName(default_back));
 		getLayeredPane().setLayout(null);
@@ -69,36 +70,39 @@ public class SessionDialog extends JDialog{
 		this.setLocation((w - this.getWidth()) / 2, (h - this.getHeight()) / 2);
 	}
 
-	public void setClientInfo(UserInfo letter) throws Exception {
+	public void setClientInfo(UserInfo letter) {
 		this.toUser = letter;
 		this.formUser = ClientExportPanel.instance.getData().getSelf();
-		List<Msg> list = ClientExportPanel.instance.getConfigObject().getMaps().get(letter.getId());
+		List<Msg> list = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
 		String info = appendChatMsg(list);
 		sessionPanel.setTitle(letter.getTitle());
 		sessionPanel.areaTextPanel.setText(info);
 		sessionPanel.addSendEvent(new SendEvent() {
 			public void send(String content) {
-				ClientExportPanel.instance.sendMsg(letter,content);
+				ClientExportPanel.instance.sendMsg(letter, content);
 			}
 		});
 	}
 
 	private String appendChatMsg(List<Msg> list) {
 		StringBuilder builder = new StringBuilder();
-		
-		if(list == null) return "";
+
+		if (list == null)
+			return "";
 		for (Msg m : list) {
 			boolean isTo = false;
-			if(m.getFromPlayerId() == toUser.getId()) isTo = true;
-			if(isTo) {
-				builder.append("[");
+			if (m.getFromPlayerId() == toUser.getId())
+				isTo = true;
+			if (isTo) {
 				builder.append(toUser.getName());
+				builder.append("[");
+				builder.append(toUser.getId());
 				builder.append("]");
-				builder.append(" 悄悄对你说:\n（"+DateUtils.getTimeByFormat(m.getSendTime(),"yyyy-MM-dd HH:mm")+"）\t");
+				builder.append(" 悄悄对你说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
 				builder.append(new String(m.getData()));
 				builder.append("\n\n");
-			}else{
-				builder.append(" 你悄悄对"+toUser.getName()+"说:\n（"+DateUtils.getTimeByFormat(m.getSendTime(),"yyyy-MM-dd HH:mm")+"）\t");
+			} else {
+				builder.append("你悄悄对[" + toUser.getName() + "]说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
 				builder.append(new String(m.getData()));
 				builder.append("\n\n");
 			}
@@ -106,14 +110,32 @@ public class SessionDialog extends JDialog{
 		return builder.toString();
 	}
 
-	public void showMsg(String msg) {
+	public void showReceiveMsg(MsgResponse m) {
+		StringBuilder builder = new StringBuilder();
 		String text = sessionPanel.areaTextPanel.getText();
-		sessionPanel.areaTextPanel.setText(text+"\r\n"+msg+"\r\n");
+		boolean isTo = false;
+		if (m.getFromPlayerId() == toUser.getId())
+			isTo = true;
+		if (isTo) {
+			builder.append(toUser.getName());
+			builder.append("[");
+			builder.append(toUser.getId());
+			builder.append("]");
+			builder.append(" 悄悄对你说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
+			builder.append(new String(m.getData()));
+			builder.append("\n\n");
+		} else {
+			builder.append("你悄悄对[" + toUser.getName() + "]说:\n（" + DateUtils.getTimeByFormat(m.getSendTime(), "yyyy-MM-dd HH:mm") + "）\t");
+			builder.append(new String(m.getData()));
+			builder.append("\n\n");
+		}
+		sessionPanel.areaTextPanel.setText(text + builder.toString());
 	}
 
 	public void showNotify(String tipContent) {
-		sessionPanel.notifyLabel.setText( tipContent);
+		sessionPanel.notifyLabel.setText(tipContent);
 	}
+
 	@Override
 	public void requestFocus() {
 		super.requestFocus();

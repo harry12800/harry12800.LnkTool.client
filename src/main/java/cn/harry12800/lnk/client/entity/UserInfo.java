@@ -9,7 +9,7 @@ import cn.harry12800.j2se.tip.Letter;
  */
 public class UserInfo extends Letter {
 
-	private int id;
+	private long id;
 	private String name;
 	private String ip;
 	private String clientType;
@@ -25,14 +25,14 @@ public class UserInfo extends Letter {
 		this.ip = ip;
 		this.name = name;
 		this.mac = mac;
-		this.id = Integer.valueOf(mac);
+		this.id = Long.valueOf(mac);
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -79,4 +79,10 @@ public class UserInfo extends Letter {
 		UserInfo other = (UserInfo) obj;
 		return  id == other.getId();
 	}
+
+	@Override
+	public String toString() {
+		return "UserInfo [id=" + id + ", name=" + name + ", ip=" + ip + ", clientType=" + clientType + ", mac=" + mac + ", token=" + token + "]";
+	}
+	
 }

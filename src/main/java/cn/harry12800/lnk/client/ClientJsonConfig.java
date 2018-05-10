@@ -11,7 +11,7 @@ public class ClientJsonConfig {
 
 	private UserInfo self;
 	private List<UserInfo> list = Lists.newArrayList();
-	private Map<Integer,List<Msg>> maps = new HashMap<>();
+	private Map<Long,List<Msg>> maps = new HashMap<>();
 	public UserInfo getSelf() {
 		return self;
 	}
@@ -24,10 +24,10 @@ public class ClientJsonConfig {
 	public void setList(List<UserInfo> list) {
 		this.list = list;
 	}
-	public Map<Integer, List<Msg>> getMaps() {
+	public Map<Long, List<Msg>> getMaps() {
 		return maps;
 	}
-	public void setMaps(Map<Integer, List<Msg>> maps) {
+	public void setMaps(Map<Long, List<Msg>> maps) {
 		this.maps = maps;
 	}
 	 

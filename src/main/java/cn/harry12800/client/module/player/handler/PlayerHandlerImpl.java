@@ -46,7 +46,7 @@ public class PlayerHandlerImpl implements PlayerHandler{
 			PlayerResponse playerResponse = new PlayerResponse();
 			playerResponse.readFromBytes(data);
 			swingclient.setPlayerResponse(playerResponse);
-			swingclient.getTips().setText("登录成功");
+			ClientExportPanel.instance.loginSuccess("登录成功！");
 		}else{
 			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 			ClientExportPanel.instance.showLoginMsg(resultCodeTip.getTipContent(resultCode));
