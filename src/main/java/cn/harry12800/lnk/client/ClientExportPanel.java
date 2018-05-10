@@ -72,9 +72,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 	private SessionDialog sessionDialog;
 	Client client = null;
-	UserInfo self = null;
 	private List<UserInfo> userList;
 	static Map<UserInfo, SessionDialog> mapsDialogByUser = new HashMap<UserInfo, SessionDialog>(0);
+	static Map<String, UserInfo> mapsUserByUserid= new HashMap<String, UserInfo>(0);
 
 	public ClientExportPanel(Context context) throws Exception {
 		super(context);
@@ -187,7 +187,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 			LoginRequest loginRequest = new LoginRequest();
 			loginRequest.setPlayerName(userNameInput.getText());
 			loginRequest.setPassward(passInput.getText());
-			self = new UserInfo(userNameInput.getText(), "", "");
+			UserInfo self = new UserInfo(userNameInput.getText(), "", "");
 			self.setToken(passInput.getText());
 			//构建请求
 			Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
@@ -233,9 +233,8 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 		this.userList = lists;
 		listPanel.removeAll();
 		for (UserInfo clientInfo : lists) {
-			System.out.println(clientInfo);
-			if (self.getTitle().equals(clientInfo.getTitle())) {
-				self.setId(clientInfo.getId());
+			if (clientInfo.getTitle().equals(getData().getSelf().getTitle())) {
+				getData().getSelf().setId(clientInfo.getId());
 				continue;
 			}
 			ItemPanel<UserInfo> itemPanel = new ItemPanel<UserInfo>(clientInfo);
@@ -249,7 +248,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	private void pullMsg() {
 		try {
 			PullMsgRequest request = new PullMsgRequest();
-			request.setUserid(Long.valueOf(self.getId()));
+			request.setUserid(Long.valueOf(getData().getSelf().getId()));
 			//构建请求
 			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.PULL_MSG, request.getBytes());
 			client.sendRequest(request1);
@@ -291,20 +290,20 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> implements Ac
 	public void showLoginMsg(String tipContent) {
 		msgLabel.setText(tipContent);
 	}
-
 	
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
 		for (MsgResponse msgResponse : msgs) {
 			System.err.println(msgResponse);
 			for (UserInfo userInfo : userList) {
-				if((msgResponse.getFromPlayerId()+"").equals( userInfo.getId())) {
-					List<Msg> list = data.getMaps().get(userInfo.getId());
+				if((msgResponse.getFromPlayerId()+"").equals( userInfo.getId())
+						||(msgResponse.getToPlayerId()+"").equals( userInfo.getId())) {
+					List<Msg> list = getData().getMaps().get(userInfo.getId());
 					if(list == null) {
 						List<Msg> newArrayList = Lists.newArrayList();
 						newArrayList.add(new Msg(msgResponse));
-						data.getMaps().put(userInfo.getId(), newArrayList);
+						getData().getMaps().put(userInfo.getId(), newArrayList);
 					}else {
-						data.getMaps().get(userInfo.getId()).add(new Msg(msgResponse));
+						getData().getMaps().get(userInfo.getId()).add(new Msg(msgResponse));
 					}
 				}
 			}

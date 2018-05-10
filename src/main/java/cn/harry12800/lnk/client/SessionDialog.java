@@ -24,9 +24,11 @@ public class SessionDialog extends JDialog{
 	 */
 	private static final long serialVersionUID = 3402650173117339424L;
 	public static SessionDialog instance;
-	private UserInfo letter;
+	private UserInfo toUser;
+	private UserInfo formUser;
 	private SessionPanel sessionPanel;
 
+	 
 	public SessionDialog() {
 		setUndecorated(true);
 		new DragListener(this);
@@ -67,14 +69,11 @@ public class SessionDialog extends JDialog{
 		this.setLocation((w - this.getWidth()) / 2, (h - this.getHeight()) / 2);
 	}
 
-	public static void main(String[] args) {
-		new SessionDialog();
-	}
-
 	public void setClientInfo(UserInfo letter) throws Exception {
-		this.letter = letter;
+		this.toUser = letter;
+		this.formUser = ClientExportPanel.instance.getData().getSelf();
 		List<Msg> list = ClientExportPanel.instance.getConfigObject().getMaps().get(letter.getId());
-		String info = appendInfo(list);
+		String info = appendChatMsg(list);
 		sessionPanel.setTitle(letter.getTitle());
 		sessionPanel.areaTextPanel.setText(info);
 		sessionPanel.addSendEvent(new SendEvent() {
@@ -84,17 +83,25 @@ public class SessionDialog extends JDialog{
 		});
 	}
 
-	private String appendInfo(List<Msg> list) {
+	private String appendChatMsg(List<Msg> list) {
 		StringBuilder builder = new StringBuilder();
+		
 		if(list == null) return "";
 		for (Msg m : list) {
-			builder.append(m.getFromPlayerId());
-			builder.append("[");
-			builder.append(m.getToPlayerId());
-			builder.append("]");
-			builder.append(" 悄悄对你说:\n（"+DateUtils.getTimeByFormat(m.getSendTime(),"yyyy-MM-dd HH:mm")+"）\t");
-			builder.append(new String(m.getData()));
-			builder.append("\n\n");
+			boolean isTo = false;
+			if(m.getFromPlayerId() == toUser.getId()) isTo = true;
+			if(isTo) {
+				builder.append("[");
+				builder.append(toUser.getName());
+				builder.append("]");
+				builder.append(" 悄悄对你说:\n（"+DateUtils.getTimeByFormat(m.getSendTime(),"yyyy-MM-dd HH:mm")+"）\t");
+				builder.append(new String(m.getData()));
+				builder.append("\n\n");
+			}else{
+				builder.append(" 你悄悄对"+toUser.getName()+"说:\n（"+DateUtils.getTimeByFormat(m.getSendTime(),"yyyy-MM-dd HH:mm")+"）\t");
+				builder.append(new String(m.getData()));
+				builder.append("\n\n");
+			}
 		}
 		return builder.toString();
 	}

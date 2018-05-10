@@ -9,14 +9,13 @@ import cn.harry12800.j2se.tip.Letter;
  */
 public class UserInfo extends Letter {
 
-	private String id;
+	private int id;
 	private String name;
 	private String ip;
 	private String clientType;
 	private String mac;
 	private String token;
 
-	
 	public void setToken(String token) {
 		this.token = token;
 	}
@@ -26,14 +25,14 @@ public class UserInfo extends Letter {
 		this.ip = ip;
 		this.name = name;
 		this.mac = mac;
-		this.id=mac;
+		this.id = Integer.valueOf(mac);
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -72,5 +71,12 @@ public class UserInfo extends Letter {
 	public String getToken() {
 		return token;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		UserInfo other = (UserInfo) obj;
+		return  id == other.getId();
+	}
 }
