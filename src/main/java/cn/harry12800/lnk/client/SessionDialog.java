@@ -113,9 +113,9 @@ public class SessionDialog extends JDialog {
 	public void showReceiveMsg(MsgResponse m) {
 		StringBuilder builder = new StringBuilder();
 		String text = sessionPanel.areaTextPanel.getText();
-		boolean isTo = false;
+		boolean isTo = true;
 		if (m.getFromPlayerId() == toUser.getId())
-			isTo = true;
+			isTo = false;
 		if (isTo) {
 			builder.append(toUser.getName());
 			builder.append("[");
@@ -129,7 +129,12 @@ public class SessionDialog extends JDialog {
 			builder.append(new String(m.getData()));
 			builder.append("\n\n");
 		}
-		sessionPanel.areaTextPanel.setText(text + builder.toString());
+		int online = m.getOnline();
+		if(online==2) {
+			sessionPanel.areaTextPanel.setText(text +"\r\n\r\n(对方离线消息)" +builder.toString());
+		}else {
+			sessionPanel.areaTextPanel.setText(text +"\r\n\r\n" +builder.toString());
+		}
 	}
 
 	public void showNotify(String tipContent) {

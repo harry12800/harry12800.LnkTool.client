@@ -28,9 +28,9 @@ public class ChatHandlerImpl implements ChatHandler {
 
 	@Override
 	public void privateChat(int resultCode, byte[] data) {
-		MsgResponse msg = new MsgResponse();
-		msg.readFromBytes(data);
 		if (resultCode == ResultCode.SUCCESS) {
+			MsgResponse msg = new MsgResponse();
+			msg.readFromBytes(data);
 			ClientExportPanel.instance.showPrivateChatSuccessNotify("发送成功", msg);
 		} else {
 			ClientExportPanel.instance.showNotify(resultCodeTip.getTipContent(resultCode));
