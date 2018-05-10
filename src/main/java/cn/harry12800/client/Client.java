@@ -44,7 +44,8 @@ public class Client {
 	Bootstrap bootstrap = new Bootstrap();
 
 	Properties p  = new Properties();
-	
+	String serverip="127.0.0.1";
+	int serverport=10000;
 	/**
 	 * 会话
 	 */
@@ -62,6 +63,8 @@ public class Client {
 	public void init() {
 		try(InputStream stream = Client.class.getResourceAsStream("/client.properties");){
 			p.load(stream);
+			serverip = p.getProperty("server.ip");
+			serverport = Integer.valueOf(p.getProperty("server.port"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +93,7 @@ public class Client {
 	 */
 	public void connect() throws InterruptedException {
 		// 连接服务端
-		ChannelFuture connect = bootstrap.connect(new InetSocketAddress("127.0.0.1", 10000));
+		ChannelFuture connect = bootstrap.connect(new InetSocketAddress(serverip, serverport));
 		connect.sync();
 		channel = connect.channel();
 	}
