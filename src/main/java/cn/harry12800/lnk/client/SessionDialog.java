@@ -160,4 +160,8 @@ public class SessionDialog extends JDialog {
 		ClientExportPanel.instance.getData().getMaps().remove(toUser.getId());
 		ClientExportPanel.instance.saveConfigObject();
 	}
+
+	public void shareFile(String path, String name) {
+		ClientExportPanel.instance.shareFile(toUser,path,name);
+	}
 }

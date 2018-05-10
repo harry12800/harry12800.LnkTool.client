@@ -5,11 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
+import cn.harry12800.j2se.action.FileTypeFilter;
 import cn.harry12800.j2se.component.MButton;
 import cn.harry12800.j2se.component.btn.ImageBtn;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;
@@ -25,8 +28,10 @@ public class SessionPanel extends JPanel implements KeyListener {
 	AreaTextPanel areaTextPanel1 = new AreaTextPanel();
 	String btnText = "发送";
 	String clearText = "清空";
+	String shareText = "共享";
 	MButton sendBtn = new MButton(btnText, 50, 30);
 	MButton clearBtn = new MButton(clearText, 50, 30);
+	MButton shareBtn = new MButton(shareText, 50, 30);
 	private SessionDialog dialog;
 	SendEvent e;
 
@@ -79,10 +84,29 @@ public class SessionPanel extends JPanel implements KeyListener {
 				dialog.clearChatMsg();
 			}
 		});
+		shareBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e1) {
+				JFileChooser jFileChooser = new JFileChooser();
+				jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				jFileChooser.setCurrentDirectory(new File("D:/"));
+				jFileChooser.setSelectedFile(new File("D:/a.text"));
+				jFileChooser.setName("abc");
+//				jFileChooser.setFileFilter(new FileTypeFilter());
+				int i = jFileChooser.showOpenDialog(null);
+				if (i == JFileChooser.APPROVE_OPTION) { //打开文件
+					String path = jFileChooser.getSelectedFile().getAbsolutePath();
+					String name = jFileChooser.getSelectedFile().getName();
+					System.out.println(path); System.out.println(name);
+					shareFile(path,name);
+				}
+			}
+		});
 		areaTextPanel1.addKeyListener(this);
 		areaTextPanel.addKeyListener(this);
 	}
-
+	private void  shareFile(String path ,String name) {
+		dialog.shareFile( path , name) ;
+	}
 	private void initCompBounds() {
 		titleLabel.setBounds(2, 0, 200, 25);
 		closeButton.setBounds(485, 0, 25, 25);
@@ -90,6 +114,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 		areaTextPanel1.setBounds(5, 285, 500, 50);
 		sendBtn.setBounds(430, 340, 50, 30);
 		clearBtn.setBounds(380, 340, 50, 30);
+		shareBtn.setBounds(300, 340, 50, 30);
 		notifyLabel.setBounds(5, 340, 200, 30);
 	}
 
@@ -100,6 +125,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 		add(titleLabel);
 		add(sendBtn);
 		add(clearBtn);
+		add(shareBtn);
 		add(notifyLabel);
 	}
 

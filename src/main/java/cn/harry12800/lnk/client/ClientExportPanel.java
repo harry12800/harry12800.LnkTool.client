@@ -28,6 +28,7 @@ import cn.harry12800.common.core.model.Request;
 import cn.harry12800.common.module.ModuleId;
 import cn.harry12800.common.module.chat.ChatCmd;
 import cn.harry12800.common.module.chat.request.PrivateChatRequest;
+import cn.harry12800.common.module.chat.request.ShareFileRequest;
 import cn.harry12800.common.module.player.PlayerCmd;
 import cn.harry12800.common.module.player.request.LoginRequest;
 import cn.harry12800.common.module.player.request.PullMsgRequest;
@@ -341,5 +342,17 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			data.getMaps().get(msg.getToPlayerId()).add(e);
 		}
 		saveConfigObject();
+	}
+
+	public void shareFile(UserInfo toUser, String path, String name) {
+		try {
+			ShareFileRequest request = new ShareFileRequest();
+			request.setTargetPlayerId( toUser.getId());
+			//构建请求
+			Request req = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
+			client.sendRequest(req);
+		} catch (Exception e) {
+			msgLabel.setText("无法连接服务器");
+		}
 	}
 }
