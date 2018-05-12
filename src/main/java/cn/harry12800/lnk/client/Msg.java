@@ -2,7 +2,6 @@ package cn.harry12800.lnk.client;
 
 import java.util.Date;
 
-import cn.harry12800.common.module.chat.dto.ChatResponse;
 import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.common.module.chat.dto.PrivateChatRequest;
 
@@ -31,9 +30,6 @@ public class Msg {
 	}
 	public void setOnline(int online) {
 		this.online = online;
-	}
-	public Msg(ChatResponse req) {
-	 
 	}
 	public long getId() {
 		return id;

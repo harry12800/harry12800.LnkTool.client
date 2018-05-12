@@ -3,6 +3,7 @@ package cn.harry12800.lnk.client;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,13 +28,16 @@ import cn.harry12800.client.Client;
 import cn.harry12800.common.core.model.Request;
 import cn.harry12800.common.module.ChatCmd;
 import cn.harry12800.common.module.ModuleId;
+import cn.harry12800.common.module.ResourceShareCmd;
 import cn.harry12800.common.module.UserCmd;
 import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.common.module.chat.dto.PrivateChatRequest;
-import cn.harry12800.common.module.chat.dto.ShareFileRequest;
+import cn.harry12800.common.module.chat.dto.SourceShareRequest;
 import cn.harry12800.common.module.user.dto.LoginRequest;
 import cn.harry12800.common.module.user.dto.PullMsgRequest;
+import cn.harry12800.common.module.user.dto.PullResourceRequest;
 import cn.harry12800.common.module.user.dto.ShowAllUserRequest;
+import cn.harry12800.common.module.user.dto.UserResponse;
 import cn.harry12800.j2se.component.ClickAction;
 import cn.harry12800.j2se.component.InputText;
 import cn.harry12800.j2se.component.MButton;
@@ -47,6 +51,7 @@ import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.ListPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
 import cn.harry12800.lnk.client.entity.UserInfo;
+import cn.harry12800.tools.FileUtils;
 import cn.harry12800.tools.Lists;
 
 @FunctionPanelModel(configPath = "client", height = 6 * 32 + 250, width = 350, defaultDisplay = true, backgroundImage = "client_back.jpg", headerImage = "teminal.png", desc = "多端操作。")
@@ -220,7 +225,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	private void pullMsg() {
 		try {
 			PullMsgRequest request = new PullMsgRequest();
-			request.setUserid(Long.valueOf(getData().getSelf().getId()));
+			request.setUserid(data.getSelf().getId());
 			//构建请求
 			Request request1 = Request.valueOf(ModuleId.USER, UserCmd.PULL_MSG, request.getBytes());
 			client.sendRequest(request1);
@@ -273,12 +278,25 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		saveConfigObject();
 	}
 
-	public void loginSuccess(String string) {
-		msgLabel.setText(string);
-		UserInfo self = new UserInfo(userNameInput.getText(), "0", "");
+	public void loginSuccess(UserResponse user) {
+		msgLabel.setText("登录成功！");
+		UserInfo self = new UserInfo(user.getUserName(),user.getId()+"", "");
 		self.setToken(passInput.getText());
 		data.setSelf(self);
 		pullUserList();
+		pullResourceShare();
+	}
+
+	private void pullResourceShare() {
+		try {
+			PullResourceRequest request = new PullResourceRequest();
+			request.setUserid(data.getSelf().getId());
+			System.err.println(data.getSelf().getId());
+			Request request1 = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.pullAllResouces, request.getBytes());
+			client.sendRequest(request1);
+		} catch (Exception e) {
+			msgLabel.setText("无法连接服务器");
+		}
 	}
 
 	public void showPrivateChatSuccessNotify(String string, MsgResponse msg) {
@@ -347,13 +365,29 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	public void shareFile(UserInfo toUser, String path, String name) {
 		try {
-			ShareFileRequest request = new ShareFileRequest();
-			request.setTargetPlayerId( toUser.getId());
+			File file = new File(path);
+			SourceShareRequest request = new SourceShareRequest();
+			request.setPath(path);
+			request.setResourceName(name);
+			request.setResourceType(file.isFile()?1:2);
+			request.setProviderId(data.getSelf().getId());
+			request.setRecipientId(toUser.getId());
+			if(file.isFile())
+			{
+				byte[] file2byte = FileUtils.file2byte1(path);
+				request.setData(file2byte);
+			}
 			//构建请求
-			Request req = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
+			Request req = Request.valueOf(ModuleId.RESOURCE,ResourceShareCmd.upload_source, request.getBytes());
 			client.sendRequest(req);
 		} catch (Exception e) {
+			e.printStackTrace();
 			msgLabel.setText("无法连接服务器");
 		}
 	}
+
+	public void showResources(List<Resource> lists) {
+			sessionDialog.showResources(  lists) ;
+	}
+	
 }

@@ -10,12 +10,16 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
 import cn.harry12800.j2se.component.MButton;
 import cn.harry12800.j2se.component.btn.ImageBtn;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;
+import cn.harry12800.j2se.style.MyScrollBarUI;
 import cn.harry12800.j2se.style.UI;
+import cn.harry12800.j2se.tip.ListPanel;
 
 @SuppressWarnings("serial")
 public class SessionPanel extends JPanel implements KeyListener {
@@ -33,6 +37,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 	MButton shareBtn = new MButton(shareText, 50, 30);
 	private SessionDialog dialog;
 	SendEvent e;
+	public ListPanel<Resource> listPanel;
 
 	public static interface SendEvent {
 		void send(String conent);
@@ -48,10 +53,27 @@ public class SessionPanel extends JPanel implements KeyListener {
 		closeButton = new ImageBtn(ImageUtils.getByName("close24.png"));
 		setProps();
 		setLayout(null);
+		initComponent();
 		addComponent();
 		initCompBounds();
 		initCompListener();
 		addKeyListener(this);
+	}
+
+	private void initComponent() {
+		this.listPanel = new ListPanel<Resource>();
+		listPanel.setBounds(502, 30, 120, 345);
+		JScrollPane scrollPane = new JScrollPane(listPanel);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.getVerticalScrollBar().setBackground(UI.backColor);
+		MyScrollBarUI myScrollBarUI = new MyScrollBarUI();
+		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		scrollPane.getVerticalScrollBar().setUI(myScrollBarUI);
+		// 屏蔽横向滚动条
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(502, 30, 120, 345);
+		add(scrollPane);
 	}
 
 	private void setProps() {
@@ -108,7 +130,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 	}
 	private void initCompBounds() {
 		titleLabel.setBounds(2, 0, 200, 25);
-		closeButton.setBounds(485, 0, 25, 25);
+		closeButton.setBounds(585, 0, 25, 25);
 		areaTextPanel.setBounds(5, 30, 500, 250);
 		areaTextPanel1.setBounds(5, 285, 500, 50);
 		sendBtn.setBounds(430, 340, 50, 30);

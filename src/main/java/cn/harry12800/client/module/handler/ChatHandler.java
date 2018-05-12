@@ -3,7 +3,6 @@ import cn.harry12800.common.core.annotion.SocketCommand;
 import cn.harry12800.common.core.annotion.SocketModule;
 import cn.harry12800.common.module.ChatCmd;
 import cn.harry12800.common.module.ModuleId;
-import cn.harry12800.common.module.chat.dto.ChatResponse;
 /**
  * 聊天
  * @author -琴兽-

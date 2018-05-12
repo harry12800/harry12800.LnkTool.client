@@ -39,9 +39,9 @@ public class UserHandlerImpl implements UserHandler{
 	@Override
 	public void login(int resultCode, byte[] data) {
 		if(resultCode == ResultCode.SUCCESS){
-			UserResponse playerResponse = new UserResponse();
-			playerResponse.readFromBytes(data);
-//			ClientExportPanel.instance.loginSuccess("登录成功！");
+			UserResponse userResponse = new UserResponse();
+			userResponse.readFromBytes(data);
+			ClientExportPanel.instance.loginSuccess(userResponse);
 		}else{
 			ClientExportPanel.instance.showLoginMsg(resultCodeTip.getTipContent(resultCode));
 		}
@@ -55,7 +55,7 @@ public class UserHandlerImpl implements UserHandler{
 			List<UserResponse> players = response.getPlayers();
 			List<UserInfo> lists = Lists.newArrayList();
 			for (UserResponse playerResponse2 : players) {
-				UserInfo c = new UserInfo(playerResponse2.getPlayerName(), playerResponse2.getPlayerId()+"", "");
+				UserInfo c = new UserInfo(playerResponse2.getUserName(), playerResponse2.getId()+"", "");
 				lists.add(c);
 			}
 			ClientExportPanel.instance.showUser(lists);

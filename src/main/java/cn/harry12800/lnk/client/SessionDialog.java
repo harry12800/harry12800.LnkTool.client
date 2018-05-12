@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.ImageIcon;
@@ -15,6 +16,7 @@ import javax.swing.JLabel;
 import cn.harry12800.Lnk.core.util.ImageUtils;
 import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.j2se.action.DragListener;
+import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.lnk.client.SessionPanel.SendEvent;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.DateUtils;
@@ -36,7 +38,7 @@ public class SessionDialog extends JDialog {
 		getRootPane().setOpaque(false);
 		this.sessionPanel = new SessionPanel(this);
 		setContentPane(sessionPanel);
-		setSize(510, 370);
+		setSize(610, 370);
 		setBackground();
 		setLocationRelativeTo(null);
 		addKeyListener(new KeyAdapter() {
@@ -163,5 +165,15 @@ public class SessionDialog extends JDialog {
 
 	public void shareFile(String path, String name) {
 		ClientExportPanel.instance.shareFile(toUser,path,name);
+	}
+
+	public void showResources(List<Resource> lists) {
+		sessionPanel.listPanel.removeAll();
+		for (Resource r : lists) {
+			ItemPanel<Resource> itemPanel = new ItemPanel<Resource>(r);
+			itemPanel.setListPanel(sessionPanel.listPanel);
+			sessionPanel.listPanel.addItem(itemPanel);
+		}
+		revalidate();	
 	}
 }
