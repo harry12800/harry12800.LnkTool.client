@@ -1,11 +1,10 @@
 package cn.harry12800.client;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import cn.harry12800.client.scanner.Invoker;
 import cn.harry12800.client.scanner.InvokerHoler;
-import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.Response;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 /**
  * 消息接受处理类
  * @author -琴兽-
@@ -13,14 +12,6 @@ import cn.harry12800.common.core.model.Response;
  */
 public class ClientHandler extends SimpleChannelInboundHandler<Response> {
 	
-	/**
-	 * 界面
-	 */
-	private Swingclient swingclient;
-	
-	public ClientHandler(Swingclient swingclient) {
-		this.swingclient = swingclient;
-	}
 
 	/**
 	 * 接收消息
@@ -58,6 +49,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Response> {
 	 */
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		swingclient.getTips().setText("与服务器断开连接~~~");
+//		swingclient.getTips().setText("与服务器断开连接~~~");
 	}
 }

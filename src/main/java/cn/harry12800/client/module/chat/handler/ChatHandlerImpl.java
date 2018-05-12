@@ -3,26 +3,23 @@ package cn.harry12800.client.module.chat.handler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.harry12800.client.swing.ResultCodeTip;
-import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.ResultCode;
 import cn.harry12800.common.module.chat.response.MsgResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
+import cn.harry12800.lnk.client.ResultCodeTip;
 
 @Component
 public class ChatHandlerImpl implements ChatHandler {
 
-	@Autowired
-	private Swingclient swingclient;
-	@Autowired
-	private ResultCodeTip resultCodeTip;
+	
+	private @Autowired ResultCodeTip resultCodeTip;
 
 	@Override
 	public void publicChat(int resultCode, byte[] data) {
 		if (resultCode == ResultCode.SUCCESS) {
-			swingclient.getTips().setText("发送成功");
+//			swingclient.getTips().setText("发送成功");
 		} else {
-			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 

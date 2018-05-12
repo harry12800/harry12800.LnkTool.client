@@ -1,4 +1,4 @@
-package cn.harry12800.client.swing;
+package cn.harry12800.lnk.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

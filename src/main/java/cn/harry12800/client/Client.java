@@ -1,5 +1,17 @@
 package cn.harry12800.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+
+import cn.harry12800.common.core.codc.RequestEncoder;
+import cn.harry12800.common.core.codc.ResponseDecoder;
+import cn.harry12800.common.core.model.Request;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -9,20 +21,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.util.Properties;
-
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import cn.harry12800.client.swing.Swingclient;
-import cn.harry12800.common.core.codc.RequestEncoder;
-import cn.harry12800.common.core.codc.ResponseDecoder;
-import cn.harry12800.common.core.model.Request;
-
 /**
  * netty客户端入门
  * 
@@ -31,12 +29,6 @@ import cn.harry12800.common.core.model.Request;
  */
 @Component
 public class Client {
-	
-	/**
-	 * 界面
-	 */
-	@Autowired
-	private Swingclient swingclient;
 
 	/**
 	 * 服务类
@@ -79,7 +71,7 @@ public class Client {
 			public void initChannel(SocketChannel ch) throws Exception {
 				ch.pipeline().addLast(new ResponseDecoder());
 				ch.pipeline().addLast(new RequestEncoder());
-				ch.pipeline().addLast(new ClientHandler(swingclient));
+				ch.pipeline().addLast(new ClientHandler());
 			}
 		});
 	}

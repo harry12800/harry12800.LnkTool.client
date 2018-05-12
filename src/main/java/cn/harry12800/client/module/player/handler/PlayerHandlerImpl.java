@@ -4,14 +4,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.harry12800.client.swing.ResultCodeTip;
-import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.ResultCode;
 import cn.harry12800.common.module.chat.response.MsgResponse;
-import cn.harry12800.common.module.player.response.UserResponse;
 import cn.harry12800.common.module.player.response.PullMsgResponse;
 import cn.harry12800.common.module.player.response.ShowAllUserResponse;
+import cn.harry12800.common.module.player.response.UserResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
+import cn.harry12800.lnk.client.ResultCodeTip;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.Lists;
 /**
@@ -21,9 +20,7 @@ import cn.harry12800.tools.Lists;
  */
 @Component
 public class PlayerHandlerImpl implements PlayerHandler{
-	
-	@Autowired
-	private Swingclient swingclient;
+	 
 	@Autowired
 	private ResultCodeTip resultCodeTip;
 
@@ -33,10 +30,9 @@ public class PlayerHandlerImpl implements PlayerHandler{
 			UserResponse playerResponse = new UserResponse();
 			playerResponse.readFromBytes(data);
 			
-			swingclient.setPlayerResponse(playerResponse);
-			swingclient.getTips().setText("注册登录成功");
+//			swingclient.getTips().setText("注册登录成功");
 		}else{
-			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 
@@ -45,10 +41,8 @@ public class PlayerHandlerImpl implements PlayerHandler{
 		if(resultCode == ResultCode.SUCCESS){
 			UserResponse playerResponse = new UserResponse();
 			playerResponse.readFromBytes(data);
-			swingclient.setPlayerResponse(playerResponse);
-			ClientExportPanel.instance.loginSuccess("登录成功！");
+//			ClientExportPanel.instance.loginSuccess("登录成功！");
 		}else{
-			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 			ClientExportPanel.instance.showLoginMsg(resultCodeTip.getTipContent(resultCode));
 		}
 	}
@@ -66,7 +60,7 @@ public class PlayerHandlerImpl implements PlayerHandler{
 			}
 			ClientExportPanel.instance.showUser(lists);
 		}else{
-			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 
@@ -83,7 +77,7 @@ public class PlayerHandlerImpl implements PlayerHandler{
 			}
 		}else{
 			System.out.println("resultCode?");
-			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 }
