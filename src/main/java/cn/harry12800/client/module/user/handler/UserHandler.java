@@ -1,4 +1,4 @@
-package cn.harry12800.client.module.player.handler;
+package cn.harry12800.client.module.user.handler;
 
 import cn.harry12800.common.core.annotion.SocketCommand;
 import cn.harry12800.common.core.annotion.SocketModule;

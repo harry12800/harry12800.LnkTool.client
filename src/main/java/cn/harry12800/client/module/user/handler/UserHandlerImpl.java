@@ -1,4 +1,4 @@
-package cn.harry12800.client.module.player.handler;
+package cn.harry12800.client.module.user.handler;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
