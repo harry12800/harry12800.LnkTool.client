@@ -11,8 +11,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import cn.harry12800.lnk.client.accept.NotifyAll;
-
 public class ClientUtil {
 
 	/**

@@ -1,4 +1,4 @@
-package cn.harry12800.lnk.client.accept;
+package cn.harry12800.lnk.client.udp;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 
 import cn.harry12800.lnk.client.Config;
-import cn.harry12800.lnk.client.udp.ClientUtil;
 
 /**
  * 接收广播用户，并返回自己的客户端个人信息

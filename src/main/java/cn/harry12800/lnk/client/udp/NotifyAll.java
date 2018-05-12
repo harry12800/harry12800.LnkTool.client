@@ -1,4 +1,4 @@
-package cn.harry12800.lnk.client.accept;
+package cn.harry12800.lnk.client.udp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,6 @@ import java.util.Set;
 
 import cn.harry12800.lnk.client.Config;
 import cn.harry12800.lnk.client.entity.UserInfo;
-import cn.harry12800.lnk.client.udp.ClientUtil;
 
 /**
  * 广播我已上线
