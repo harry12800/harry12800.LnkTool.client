@@ -2,30 +2,31 @@ package cn.harry12800.client.scanner;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 /**
  * 命令执行器
  * @author -琴兽-
  *
  */
 public class Invoker {
-	
+
 	/**
 	 * 方法
 	 */
 	private Method method;
-	
+
 	/**
 	 * 目标对象
 	 */
 	private Object target;
-	
-	public static Invoker valueOf(Method method, Object target){
+
+	public static Invoker valueOf(Method method, Object target) {
 		Invoker invoker = new Invoker();
 		invoker.setMethod(method);
 		invoker.setTarget(target);
 		return invoker;
 	}
-	
+
 	/**
 	 * 执行
 	 * @param paramValues
@@ -34,7 +35,7 @@ public class Invoker {
 	 * @throws IllegalArgumentException 
 	 * @throws IllegalAccessException 
 	 */
-	public Object invoke(Object... paramValues){
+	public Object invoke(Object... paramValues) {
 		try {
 			return method.invoke(target, paramValues);
 		} catch (IllegalAccessException e) {

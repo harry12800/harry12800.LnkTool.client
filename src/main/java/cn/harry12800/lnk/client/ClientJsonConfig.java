@@ -12,22 +12,28 @@ public class ClientJsonConfig {
 
 	private UserInfo self;
 	private List<UserInfo> list = Lists.newArrayList();
-	private Map<Long,ConcurrentLinkedQueue<Msg>> maps = new HashMap<>();
+	private Map<Long, ConcurrentLinkedQueue<Msg>> maps = new HashMap<>();
+
 	public UserInfo getSelf() {
 		return self;
 	}
+
 	public void setSelf(UserInfo self) {
 		this.self = self;
 	}
+
 	public List<UserInfo> getList() {
 		return list;
 	}
+
 	public void setList(List<UserInfo> list) {
 		this.list = list;
 	}
+
 	public Map<Long, ConcurrentLinkedQueue<Msg>> getMaps() {
 		return maps;
 	}
+
 	public void setMaps(Map<Long, ConcurrentLinkedQueue<Msg>> maps) {
 		this.maps = maps;
 	}

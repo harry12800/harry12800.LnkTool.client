@@ -77,12 +77,12 @@ public class UserInfo extends Letter {
 		if (obj == null)
 			return false;
 		UserInfo other = (UserInfo) obj;
-		return  id == other.getId();
+		return id == other.getId();
 	}
 
 	@Override
 	public String toString() {
 		return "UserInfo [id=" + id + ", name=" + name + ", ip=" + ip + ", clientType=" + clientType + ", mac=" + mac + ", token=" + token + "]";
 	}
-	
+
 }

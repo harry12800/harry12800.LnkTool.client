@@ -14,6 +14,7 @@ import cn.harry12800.lnk.client.Config;
 public class BroadcastReceiveThread extends Thread {
 	static DatagramSocket responseSocket;
 	static byte[] buf = new byte[1024];
+
 	@Override
 	public void run() {
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
@@ -23,7 +24,7 @@ public class BroadcastReceiveThread extends Thread {
 			while (!Config.serverStop) {
 				responseSocket.receive(packet);
 				String rcvd = "Received " + new String(packet.getData(), 0, packet.getLength()) + " from address: "
-						+ packet.getSocketAddress()+ "  port:"+packet.getPort();
+						+ packet.getSocketAddress() + "  port:" + packet.getPort();
 				System.err.println(rcvd);
 				// Send a response packet to sender
 				InetAddress ia1 = InetAddress.getLocalHost();//获取本地IP对象    
@@ -32,8 +33,8 @@ public class BroadcastReceiveThread extends Thread {
 				byte[] data = backData.getBytes();
 				System.err.println("Send " + backData + " to " + packet.getSocketAddress());
 				DatagramPacket backPacket = new DatagramPacket(data, 0, data.length, packet.getSocketAddress());
-				if(!packet.getAddress().getHostAddress().equals(responseSocket.getLocalAddress().getAddress()))
-				responseSocket.send(backPacket);
+				if (!packet.getAddress().getHostAddress().equals(responseSocket.getLocalAddress().getAddress()))
+					responseSocket.send(backPacket);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,13 +62,13 @@ public class BroadcastReceiveThread extends Thread {
 		return sb.toString().toUpperCase();
 	}
 
-	public static void send() throws  Exception {
+	public static void send() throws Exception {
 		String broadcastAddr = ClientUtil.getBroadcastAddress();
 		String broadcastMsg = "broadcast data";
 		InetAddress hostAddress = InetAddress.getByName(broadcastAddr);
 		buf = broadcastMsg.getBytes();
 		System.err.println("Send " + broadcastMsg + " to " + hostAddress);
 		DatagramPacket out = new DatagramPacket(buf, buf.length, hostAddress, Config.serverListenPort);
-		BroadcastReceiveThread.responseSocket .send(out );
+		BroadcastReceiveThread.responseSocket.send(out);
 	}
 }

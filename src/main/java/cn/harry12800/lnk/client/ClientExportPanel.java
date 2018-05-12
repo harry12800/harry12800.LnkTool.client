@@ -32,7 +32,9 @@ import cn.harry12800.common.module.ResourceShareCmd;
 import cn.harry12800.common.module.UserCmd;
 import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.common.module.chat.dto.PrivateChatRequest;
+import cn.harry12800.common.module.chat.dto.ResourceDto;
 import cn.harry12800.common.module.chat.dto.SourceShareRequest;
+import cn.harry12800.common.module.user.dto.DownLoadResourceRequest;
 import cn.harry12800.common.module.user.dto.LoginRequest;
 import cn.harry12800.common.module.user.dto.PullMsgRequest;
 import cn.harry12800.common.module.user.dto.PullResourceRequest;
@@ -258,12 +260,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
-		System.out.println("离线消息："+msgs.size());
+		System.out.println("离线消息：" + msgs.size());
 		for (MsgResponse msgResponse : msgs) {
 			//			System.err.println(msgResponse);
 			for (UserInfo userInfo : userList) {
 				//				System.out.println(userInfo);
-				if ( msgResponse.getFromId() == userInfo.getId()) {
+				if (msgResponse.getFromId() == userInfo.getId()) {
 					ConcurrentLinkedQueue<Msg> linkedHashSet = getData().getMaps().get(userInfo.getId());
 					if (linkedHashSet == null) {
 						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
@@ -280,7 +282,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	public void loginSuccess(UserResponse user) {
 		msgLabel.setText("登录成功！");
-		UserInfo self = new UserInfo(user.getUserName(),user.getId()+"", "");
+		UserInfo self = new UserInfo(user.getUserName(), user.getId() + "", "");
 		self.setToken(passInput.getText());
 		data.setSelf(self);
 		pullUserList();
@@ -321,23 +323,22 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	private void hotKey() {
-		try{
+		try {
 			JIntellitype.getInstance().registerHotKey(105, JIntellitype.MOD_ALT, (int) '2');
 			JIntellitype.getInstance().addHotKeyListener(new HotkeyListener() {
 				public void onHotKey(int key) {
 					if (key == 105) { // 你要做的事
 						if (ClientExportPanel.instance.sessionDialog.isVisible())
 							ClientExportPanel.instance.sessionDialog.dispose();
-						else
-						{
+						else {
 							ClientExportPanel.instance.sessionDialog.setVisible(true);
 							ClientExportPanel.instance.sessionDialog.requestFocus();
 						}
 					}
 				}
 			});
-		}catch(Exception e) {
-			System.out.println("ALT+N 热键失败！" );
+		} catch (Exception e) {
+			System.out.println("ALT+N 热键失败！");
 		}
 	}
 
@@ -369,16 +370,15 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			SourceShareRequest request = new SourceShareRequest();
 			request.setPath(path);
 			request.setResourceName(name);
-			request.setResourceType(file.isFile()?1:2);
+			request.setResourceType(file.isFile() ? 1 : 2);
 			request.setProviderId(data.getSelf().getId());
 			request.setRecipientId(toUser.getId());
-			if(file.isFile())
-			{
+			if (file.isFile()) {
 				byte[] file2byte = FileUtils.file2byte1(path);
 				request.setData(file2byte);
 			}
 			//构建请求
-			Request req = Request.valueOf(ModuleId.RESOURCE,ResourceShareCmd.upload_source, request.getBytes());
+			Request req = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.upload_source, request.getBytes());
 			client.sendRequest(req);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -387,7 +387,21 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void showResources(List<Resource> lists) {
-			sessionDialog.showResources(  lists) ;
+		sessionDialog.showResources(lists);
 	}
-	
+
+	public void downloadResource(Resource letter) {
+		try {
+			DownLoadResourceRequest request = new DownLoadResourceRequest();
+			request.setResourceId(letter.getId());
+			Request r = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.pullResouces, request.getBytes());
+			client.sendRequest(r);
+		} catch (Exception e) {
+			msgLabel.setText("无法连接服务器");
+		}
+	}
+
+	public void downloadResourceCallback(ResourceDto response) {
+		FileUtils.byte2File(response.getData(), "D:/", response.getResourceName());
+	}
 }

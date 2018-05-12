@@ -17,6 +17,7 @@ import cn.harry12800.Lnk.core.util.ImageUtils;
 import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.j2se.tip.ItemPanel;
+import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
 import cn.harry12800.lnk.client.SessionPanel.SendEvent;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.DateUtils;
@@ -75,14 +76,21 @@ public class SessionDialog extends JDialog {
 		this.toUser = letter;
 		ConcurrentLinkedQueue<Msg> linkedHashSet = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
 		String info = appendAllChatMsg(linkedHashSet);
-		if(linkedHashSet == null)
-		System.out.println("本地数据条数。"+0);
-		else System.out.println("本地数据条数。"+linkedHashSet.size());
+		if (linkedHashSet == null)
+			System.out.println("本地数据条数。" + 0);
+		else
+			System.out.println("本地数据条数。" + linkedHashSet.size());
 		sessionPanel.setTitle(letter.getTitle());
 		sessionPanel.areaTextPanel.setText(info);
 		sessionPanel.addSendEvent(new SendEvent() {
 			public void send(String content) {
 				ClientExportPanel.instance.sendMsg(letter, content);
+			}
+		});
+		sessionPanel.listPanel.addCallBack(new ListCallBack<Resource>() {
+			@Override
+			public void item(ItemPanel<Resource> itemPanel, Resource letter) {
+				ClientExportPanel.instance.downloadResource(letter);
 			}
 		});
 	}
@@ -139,9 +147,10 @@ public class SessionDialog extends JDialog {
 			builder.append(new String(m.getData()));
 			builder.append("\n\n");
 		}
-		if(!text.isEmpty())
-			sessionPanel.areaTextPanel.setText(text + "\n\n"+builder.toString());
-		else sessionPanel.areaTextPanel.setText(builder.toString());
+		if (!text.isEmpty())
+			sessionPanel.areaTextPanel.setText(text + "\n\n" + builder.toString());
+		else
+			sessionPanel.areaTextPanel.setText(builder.toString());
 	}
 
 	public void showNotify(String tipContent) {
@@ -152,7 +161,7 @@ public class SessionDialog extends JDialog {
 	public void requestFocus() {
 		super.requestFocus();
 		sessionPanel.areaTextPanel1.requestFocus();
-		sessionPanel.areaTextPanel1.area.setCaretPosition( sessionPanel.areaTextPanel1.area.getDocument().getLength());
+		sessionPanel.areaTextPanel1.area.setCaretPosition(sessionPanel.areaTextPanel1.area.getDocument().getLength());
 	}
 
 	/**
@@ -164,7 +173,7 @@ public class SessionDialog extends JDialog {
 	}
 
 	public void shareFile(String path, String name) {
-		ClientExportPanel.instance.shareFile(toUser,path,name);
+		ClientExportPanel.instance.shareFile(toUser, path, name);
 	}
 
 	public void showResources(List<Resource> lists) {
@@ -174,6 +183,6 @@ public class SessionDialog extends JDialog {
 			itemPanel.setListPanel(sessionPanel.listPanel);
 			sessionPanel.listPanel.addItem(itemPanel);
 		}
-		revalidate();	
+		revalidate();
 	}
 }

@@ -20,6 +20,7 @@ public interface ResourceShareHandler {
 	 */
 	@SocketCommand(cmd = ResourceShareCmd.upload_source, desc = "上传回调")
 	public void uploadResourceResult(int resultCode, byte[] data);
+
 	/**
 	 * 创建并登录帐号
 	 * @param resultCode
@@ -27,4 +28,12 @@ public interface ResourceShareHandler {
 	 */
 	@SocketCommand(cmd = ResourceShareCmd.pullAllResouces, desc = "回调资源")
 	public void pullAllResouces(int resultCode, byte[] data);
+
+	/**
+	 * 创建并登录帐号
+	 * @param resultCode
+	 * @param data {@link null}
+	 */
+	@SocketCommand(cmd = ResourceShareCmd.download_source, desc = "下载资源")
+	public void downloadResource(int resultCode, byte[] data);
 }

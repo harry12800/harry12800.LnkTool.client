@@ -38,6 +38,7 @@ public class ClientUtil {
 		}
 		return "";
 	}
+
 	public static String getBroadcastAddress() {
 		String ip = getIpAddress();
 		String[] split = ip.split("[.]");

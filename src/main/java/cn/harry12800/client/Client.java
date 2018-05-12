@@ -35,9 +35,9 @@ public class Client {
 	 */
 	Bootstrap bootstrap = new Bootstrap();
 
-	Properties p  = new Properties();
-	String serverip="127.0.0.1";
-	int serverport=10000;
+	Properties p = new Properties();
+	String serverip = "127.0.0.1";
+	int serverport = 10000;
 	/**
 	 * 会话
 	 */
@@ -53,7 +53,7 @@ public class Client {
 	 */
 	@PostConstruct
 	public void init() {
-		try(InputStream stream = Client.class.getResourceAsStream("/client.properties");){
+		try (InputStream stream = Client.class.getResourceAsStream("/client.properties");) {
 			p.load(stream);
 			serverip = p.getProperty("server.ip");
 			serverport = Integer.valueOf(p.getProperty("server.port"));
@@ -104,14 +104,14 @@ public class Client {
 	public Channel getChannel() {
 		return channel;
 	}
-	
+
 	/**
 	 * 发送消息
 	 * @param request
 	 * @throws InterruptedException 
 	 */
-	public void sendRequest(Request request) throws InterruptedException{
-		if(channel == null || !channel.isActive()){
+	public void sendRequest(Request request) throws InterruptedException {
+		if (channel == null || !channel.isActive()) {
 			connect();
 		}
 		channel.writeAndFlush(request);

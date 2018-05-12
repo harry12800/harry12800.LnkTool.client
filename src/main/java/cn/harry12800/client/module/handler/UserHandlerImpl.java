@@ -1,4 +1,5 @@
 package cn.harry12800.client.module.handler;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,71 +14,72 @@ import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.ResultCodeTip;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.Lists;
+
 /**
  * 玩家模块
  * @author -琴兽-
  *
  */
 @Component
-public class UserHandlerImpl implements UserHandler{
-	 
+public class UserHandlerImpl implements UserHandler {
+
 	@Autowired
 	private ResultCodeTip resultCodeTip;
 
 	@Override
 	public void registerAndLogin(int resultCode, byte[] data) {
-		if(resultCode == ResultCode.SUCCESS){
+		if (resultCode == ResultCode.SUCCESS) {
 			UserResponse playerResponse = new UserResponse();
 			playerResponse.readFromBytes(data);
-			
-//			swingclient.getTips().setText("注册登录成功");
-		}else{
-//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+
+			//			swingclient.getTips().setText("注册登录成功");
+		} else {
+			//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 
 	@Override
 	public void login(int resultCode, byte[] data) {
-		if(resultCode == ResultCode.SUCCESS){
+		if (resultCode == ResultCode.SUCCESS) {
 			UserResponse userResponse = new UserResponse();
 			userResponse.readFromBytes(data);
 			ClientExportPanel.instance.loginSuccess(userResponse);
-		}else{
+		} else {
 			ClientExportPanel.instance.showLoginMsg(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 
 	@Override
 	public void showAllUser(int resultCode, byte[] data) {
-		if(resultCode == ResultCode.SUCCESS) {
+		if (resultCode == ResultCode.SUCCESS) {
 			ShowAllUserResponse response = new ShowAllUserResponse();
 			response.readFromBytes(data);
 			List<UserResponse> players = response.getPlayers();
 			List<UserInfo> lists = Lists.newArrayList();
 			for (UserResponse playerResponse2 : players) {
-				UserInfo c = new UserInfo(playerResponse2.getUserName(), playerResponse2.getId()+"", "");
+				UserInfo c = new UserInfo(playerResponse2.getUserName(), playerResponse2.getId() + "", "");
 				lists.add(c);
 			}
 			ClientExportPanel.instance.showUser(lists);
-		}else{
-//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+		} else {
+			//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 
 	@Override
 	public void pullMsg(int resultCode, byte[] data) {
-		if(resultCode == ResultCode.SUCCESS) {
+		if (resultCode == ResultCode.SUCCESS) {
 			PullMsgResponse response = new PullMsgResponse();
 			response.readFromBytes(data);
-			 List<MsgResponse> msgs = response.getMsgs();
+			List<MsgResponse> msgs = response.getMsgs();
 			try {
 				ClientExportPanel.instance.showPullMsg(msgs);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			System.out.println("resultCode?");
-//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+			//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 }

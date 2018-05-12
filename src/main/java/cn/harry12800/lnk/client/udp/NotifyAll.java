@@ -86,9 +86,8 @@ public class NotifyAll extends Thread {
 			buf = broadcastMsg.getBytes();
 			System.err.println("Send " + broadcastMsg + " to " + hostAddress);
 			DatagramPacket out = new DatagramPacket(buf, buf.length, hostAddress, Config.serverListenPort);
-//			this.detectSocket = detectSocket;
+			//			this.detectSocket = detectSocket;
 		}
 	}
 
-	
 }

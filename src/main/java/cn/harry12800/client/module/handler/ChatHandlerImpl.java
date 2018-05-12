@@ -12,14 +12,14 @@ import cn.harry12800.lnk.client.ResultCodeTip;
 public class ChatHandlerImpl implements ChatHandler {
 
 	@Autowired
-	private  ResultCodeTip resultCodeTip;
+	private ResultCodeTip resultCodeTip;
 
 	@Override
 	public void publicChat(int resultCode, byte[] data) {
 		if (resultCode == ResultCode.SUCCESS) {
-//			swingclient.getTips().setText("发送成功");
+			//			swingclient.getTips().setText("发送成功");
 		} else {
-//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
+			//			swingclient.getTips().setText(resultCodeTip.getTipContent(resultCode));
 		}
 	}
 

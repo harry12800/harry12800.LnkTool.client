@@ -25,8 +25,8 @@ import cn.harry12800.j2se.tip.ListPanel;
 public class SessionPanel extends JPanel implements KeyListener {
 
 	ImageBtn closeButton;
-	  JLabel titleLabel = new JLabel("语言翻译");
-	  JLabel notifyLabel = new JLabel("");
+	JLabel titleLabel = new JLabel("语言翻译");
+	JLabel notifyLabel = new JLabel("");
 	AreaTextPanel areaTextPanel = new AreaTextPanel();
 	AreaTextPanel areaTextPanel1 = new AreaTextPanel();
 	String btnText = "发送";
@@ -93,7 +93,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 		});
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e1) {
-				if(!"".equals(areaTextPanel1.getText().trim()))
+				if (!"".equals(areaTextPanel1.getText().trim()))
 					e.send(areaTextPanel1.getText());
 				areaTextPanel1.setText("");
 			}
@@ -112,22 +112,25 @@ public class SessionPanel extends JPanel implements KeyListener {
 				jFileChooser.setCurrentDirectory(new File("D:/"));
 				jFileChooser.setSelectedFile(new File("D:/a.text"));
 				jFileChooser.setName("abc");
-//				jFileChooser.setFileFilter(new FileTypeFilter());
+				//				jFileChooser.setFileFilter(new FileTypeFilter());
 				int i = jFileChooser.showOpenDialog(null);
 				if (i == JFileChooser.APPROVE_OPTION) { //打开文件
 					String path = jFileChooser.getSelectedFile().getAbsolutePath();
 					String name = jFileChooser.getSelectedFile().getName();
-					System.out.println(path); System.out.println(name);
-					shareFile(path,name);
+					System.out.println(path);
+					System.out.println(name);
+					shareFile(path, name);
 				}
 			}
 		});
 		areaTextPanel1.addKeyListener(this);
 		areaTextPanel.addKeyListener(this);
 	}
-	private void  shareFile(String path ,String name) {
-		dialog.shareFile( path , name) ;
+
+	private void shareFile(String path, String name) {
+		dialog.shareFile(path, name);
 	}
+
 	private void initCompBounds() {
 		titleLabel.setBounds(2, 0, 200, 25);
 		closeButton.setBounds(585, 0, 25, 25);
@@ -167,7 +170,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 		if (e1.getKeyCode() == 27) {
 			dialog.setVisible(false);
 		} else if (e1.getKeyCode() == 10) {
-			if(!"".equals(areaTextPanel1.getText().trim()))
+			if (!"".equals(areaTextPanel1.getText().trim()))
 				e.send(areaTextPanel1.getText());
 			areaTextPanel1.setText("");
 		}
