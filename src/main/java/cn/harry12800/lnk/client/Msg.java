@@ -2,9 +2,9 @@ package cn.harry12800.lnk.client;
 
 import java.util.Date;
 
-import cn.harry12800.common.module.chat.request.PrivateChatRequest;
-import cn.harry12800.common.module.chat.response.ChatResponse;
-import cn.harry12800.common.module.chat.response.MsgResponse;
+import cn.harry12800.common.module.chat.dto.ChatResponse;
+import cn.harry12800.common.module.chat.dto.MsgResponse;
+import cn.harry12800.common.module.chat.dto.PrivateChatRequest;
 
 public class Msg {
 	private long id;

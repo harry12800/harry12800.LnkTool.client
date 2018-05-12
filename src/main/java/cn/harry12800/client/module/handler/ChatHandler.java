@@ -1,9 +1,9 @@
-package cn.harry12800.client.module.chat.handler;
+package cn.harry12800.client.module.handler;
 import cn.harry12800.common.core.annotion.SocketCommand;
 import cn.harry12800.common.core.annotion.SocketModule;
+import cn.harry12800.common.module.ChatCmd;
 import cn.harry12800.common.module.ModuleId;
-import cn.harry12800.common.module.chat.ChatCmd;
-import cn.harry12800.common.module.chat.response.ChatResponse;
+import cn.harry12800.common.module.chat.dto.ChatResponse;
 /**
  * 聊天
  * @author -琴兽-

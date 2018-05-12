@@ -1,18 +1,18 @@
-package cn.harry12800.client.module.chat.handler;
+package cn.harry12800.client.module.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.harry12800.common.core.model.ResultCode;
-import cn.harry12800.common.module.chat.response.MsgResponse;
+import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.ResultCodeTip;
 
 @Component
 public class ChatHandlerImpl implements ChatHandler {
 
-	
-	private @Autowired ResultCodeTip resultCodeTip;
+	@Autowired
+	private  ResultCodeTip resultCodeTip;
 
 	@Override
 	public void publicChat(int resultCode, byte[] data) {

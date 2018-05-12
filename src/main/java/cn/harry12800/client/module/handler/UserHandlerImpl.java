@@ -1,14 +1,14 @@
-package cn.harry12800.client.module.user.handler;
+package cn.harry12800.client.module.handler;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.harry12800.common.core.model.ResultCode;
-import cn.harry12800.common.module.chat.response.MsgResponse;
-import cn.harry12800.common.module.user.response.PullMsgResponse;
-import cn.harry12800.common.module.user.response.ShowAllUserResponse;
-import cn.harry12800.common.module.user.response.UserResponse;
+import cn.harry12800.common.module.chat.dto.MsgResponse;
+import cn.harry12800.common.module.user.dto.PullMsgResponse;
+import cn.harry12800.common.module.user.dto.ShowAllUserResponse;
+import cn.harry12800.common.module.user.dto.UserResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.ResultCodeTip;
 import cn.harry12800.lnk.client.entity.UserInfo;

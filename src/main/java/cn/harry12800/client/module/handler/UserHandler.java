@@ -1,9 +1,9 @@
-package cn.harry12800.client.module.user.handler;
+package cn.harry12800.client.module.handler;
 
 import cn.harry12800.common.core.annotion.SocketCommand;
 import cn.harry12800.common.core.annotion.SocketModule;
 import cn.harry12800.common.module.ModuleId;
-import cn.harry12800.common.module.user.UserCmd;
+import cn.harry12800.common.module.UserCmd;
 
 /**
  * 玩家模块
