@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 import cn.harry12800.common.core.model.ResultCode;
 import cn.harry12800.common.module.chat.response.MsgResponse;
-import cn.harry12800.common.module.player.response.PullMsgResponse;
-import cn.harry12800.common.module.player.response.ShowAllUserResponse;
-import cn.harry12800.common.module.player.response.UserResponse;
+import cn.harry12800.common.module.user.response.PullMsgResponse;
+import cn.harry12800.common.module.user.response.ShowAllUserResponse;
+import cn.harry12800.common.module.user.response.UserResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.ResultCodeTip;
 import cn.harry12800.lnk.client.entity.UserInfo;
@@ -19,7 +19,7 @@ import cn.harry12800.tools.Lists;
  *
  */
 @Component
-public class PlayerHandlerImpl implements PlayerHandler{
+public class UserHandlerImpl implements UserHandler{
 	 
 	@Autowired
 	private ResultCodeTip resultCodeTip;
