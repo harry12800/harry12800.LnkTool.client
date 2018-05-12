@@ -253,12 +253,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
+		System.out.println("离线消息："+msgs.size());
 		for (MsgResponse msgResponse : msgs) {
 			//			System.err.println(msgResponse);
 			for (UserInfo userInfo : userList) {
 				//				System.out.println(userInfo);
-				if (msgResponse.getFromPlayerId() == userInfo.getId()
-						|| msgResponse.getToPlayerId() == userInfo.getId()) {
+				if ( msgResponse.getFromId() == userInfo.getId()) {
 					ConcurrentLinkedQueue<Msg> linkedHashSet = getData().getMaps().get(userInfo.getId());
 					if (linkedHashSet == null) {
 						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
@@ -283,7 +283,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	public void showPrivateChatSuccessNotify(String string, MsgResponse msg) {
 		for (UserInfo clientInfo : userList) {
-			if (clientInfo.getId() == msg.getToPlayerId()) {
+			if (clientInfo.getId() == msg.getToId()) {
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();
@@ -291,13 +291,13 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			}
 		}
 		Msg e = new Msg(msg);
-		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToPlayerId());
+		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToId());
 		if (linkedHashSet == null) {
 			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
 			value.add(e);
-			data.getMaps().put(msg.getToPlayerId(), value);
+			data.getMaps().put(msg.getToId(), value);
 		} else {
-			data.getMaps().get(msg.getToPlayerId()).add(e);
+			data.getMaps().get(msg.getToId()).add(e);
 		}
 		saveConfigObject();
 	}
@@ -325,21 +325,22 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	public void showReceiveMsg(MsgResponse msg) {
 		for (UserInfo clientInfo : userList) {
-			if (clientInfo.getId() == msg.getFromPlayerId()) {
+			if (clientInfo.getId() == msg.getFromId()) {
 				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();
 				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(msg);
+				System.out.println("接收消息");
 			}
 		}
 		Msg e = new Msg(msg);
-		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToPlayerId());
+		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToId());
 		if (linkedHashSet == null) {
 			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
 			value.add(e);
-			data.getMaps().put(msg.getToPlayerId(), value);
+			data.getMaps().put(msg.getToId(), value);
 		} else {
-			data.getMaps().get(msg.getToPlayerId()).add(e);
+			data.getMaps().get(msg.getToId()).add(e);
 		}
 		saveConfigObject();
 	}

@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
-import cn.harry12800.j2se.action.FileTypeFilter;
 import cn.harry12800.j2se.component.MButton;
 import cn.harry12800.j2se.component.btn.ImageBtn;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;

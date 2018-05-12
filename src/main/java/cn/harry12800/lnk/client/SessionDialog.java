@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.LinkedHashSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.ImageIcon;
@@ -27,7 +26,6 @@ public class SessionDialog extends JDialog {
 	private static final long serialVersionUID = 3402650173117339424L;
 	public static SessionDialog instance;
 	private UserInfo toUser;
-	private UserInfo formUser;
 	private SessionPanel sessionPanel;
 
 	public SessionDialog() {
@@ -73,9 +71,11 @@ public class SessionDialog extends JDialog {
 
 	public void setClientInfo(UserInfo letter) {
 		this.toUser = letter;
-		this.formUser = ClientExportPanel.instance.getData().getSelf();
 		ConcurrentLinkedQueue<Msg> linkedHashSet = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
 		String info = appendAllChatMsg(linkedHashSet);
+		if(linkedHashSet == null)
+		System.out.println("本地数据条数。"+0);
+		else System.out.println("本地数据条数。"+linkedHashSet.size());
 		sessionPanel.setTitle(letter.getTitle());
 		sessionPanel.areaTextPanel.setText(info);
 		sessionPanel.addSendEvent(new SendEvent() {
@@ -118,7 +118,7 @@ public class SessionDialog extends JDialog {
 		StringBuilder builder = new StringBuilder();
 		String text = sessionPanel.areaTextPanel.getText().trim();
 		boolean isTo = false;
-		if (m.getFromPlayerId() == toUser.getId())
+		if (m.getId() == toUser.getId())
 			isTo = true;
 		if (isTo) {
 			if (m.getOnline() == 2)

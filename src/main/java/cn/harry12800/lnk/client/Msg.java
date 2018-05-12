@@ -16,9 +16,9 @@ public class Msg {
 	private byte[] data;
 	public Msg(MsgResponse m) {
 		id = m.getId();
-		fromPlayerId = m.getFromPlayerId();
+		fromPlayerId = m.getFromId();
 		online = m.getOnline();
-		toPlayerId = m.getToPlayerId();
+		toPlayerId = m.getToId();
 		sendTime = m.getSendTime();
 		dataType = m.getDataType();
 		data = m.getData();
