@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import cn.harry12800.client.swing.ResultCodeTip;
 import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.ResultCode;
-import cn.harry12800.common.module.player.response.MsgResponse;
-import cn.harry12800.common.module.player.response.PlayerResponse;
+import cn.harry12800.common.module.chat.response.MsgResponse;
+import cn.harry12800.common.module.player.response.UserResponse;
 import cn.harry12800.common.module.player.response.PullMsgResponse;
-import cn.harry12800.common.module.player.response.ShowAllPlayerResponse;
+import cn.harry12800.common.module.player.response.ShowAllUserResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.Lists;
@@ -30,7 +30,7 @@ public class PlayerHandlerImpl implements PlayerHandler{
 	@Override
 	public void registerAndLogin(int resultCode, byte[] data) {
 		if(resultCode == ResultCode.SUCCESS){
-			PlayerResponse playerResponse = new PlayerResponse();
+			UserResponse playerResponse = new UserResponse();
 			playerResponse.readFromBytes(data);
 			
 			swingclient.setPlayerResponse(playerResponse);
@@ -43,7 +43,7 @@ public class PlayerHandlerImpl implements PlayerHandler{
 	@Override
 	public void login(int resultCode, byte[] data) {
 		if(resultCode == ResultCode.SUCCESS){
-			PlayerResponse playerResponse = new PlayerResponse();
+			UserResponse playerResponse = new UserResponse();
 			playerResponse.readFromBytes(data);
 			swingclient.setPlayerResponse(playerResponse);
 			ClientExportPanel.instance.loginSuccess("登录成功！");
@@ -56,11 +56,11 @@ public class PlayerHandlerImpl implements PlayerHandler{
 	@Override
 	public void showAllUser(int resultCode, byte[] data) {
 		if(resultCode == ResultCode.SUCCESS) {
-			ShowAllPlayerResponse response = new ShowAllPlayerResponse();
+			ShowAllUserResponse response = new ShowAllUserResponse();
 			response.readFromBytes(data);
-			List<PlayerResponse> players = response.getPlayers();
+			List<UserResponse> players = response.getPlayers();
 			List<UserInfo> lists = Lists.newArrayList();
-			for (PlayerResponse playerResponse2 : players) {
+			for (UserResponse playerResponse2 : players) {
 				UserInfo c = new UserInfo(playerResponse2.getPlayerName(), playerResponse2.getPlayerId()+"", "");
 				lists.add(c);
 			}

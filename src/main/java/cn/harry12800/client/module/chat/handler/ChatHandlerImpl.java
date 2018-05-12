@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import cn.harry12800.client.swing.ResultCodeTip;
 import cn.harry12800.client.swing.Swingclient;
 import cn.harry12800.common.core.model.ResultCode;
-import cn.harry12800.common.module.player.response.MsgResponse;
+import cn.harry12800.common.module.chat.response.MsgResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 
 @Component

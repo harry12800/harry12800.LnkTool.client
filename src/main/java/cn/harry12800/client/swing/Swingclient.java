@@ -25,7 +25,7 @@ import cn.harry12800.common.module.chat.request.PublicChatRequest;
 import cn.harry12800.common.module.player.PlayerCmd;
 import cn.harry12800.common.module.player.request.LoginRequest;
 import cn.harry12800.common.module.player.request.RegisterRequest;
-import cn.harry12800.common.module.player.response.PlayerResponse;
+import cn.harry12800.common.module.player.response.UserResponse;
 
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -45,7 +45,7 @@ public class Swingclient extends JFrame implements ActionListener {
 	/**
 	 * 玩家信息
 	 */
-	private PlayerResponse playerResponse;
+	private UserResponse playerResponse;
 	
 	/**
 	 * 用户名
@@ -205,7 +205,7 @@ public class Swingclient extends JFrame implements ActionListener {
 				loginRequest.setPassward(passward.getText());
 				
 				//构建请求
-				Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
+				Request request = Request.valueOf(ModuleId.USER, PlayerCmd.LOGIN, loginRequest.getBytes());
 				client.sendRequest(request);
 			} catch (Exception e) {
 				tips.setText("无法连接服务器");
@@ -219,7 +219,7 @@ public class Swingclient extends JFrame implements ActionListener {
 				registerRequest.setPassward(passward.getText());
 				
 				//构建请求
-				Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.REGISTER_AND_LOGIN, registerRequest.getBytes());
+				Request request = Request.valueOf(ModuleId.USER, PlayerCmd.REGISTER_AND_LOGIN, registerRequest.getBytes());
 				client.sendRequest(request);
 			} catch (Exception e) {
 				tips.setText("无法连接服务器");
@@ -283,11 +283,11 @@ public class Swingclient extends JFrame implements ActionListener {
 		return tips;
 	}
 
-	public void setPlayerResponse(PlayerResponse playerResponse) {
+	public void setPlayerResponse(UserResponse playerResponse) {
 		this.playerResponse = playerResponse;
 	}
 
-	public PlayerResponse getPlayerResponse() {
+	public UserResponse getPlayerResponse() {
 		return playerResponse;
 	}
 }

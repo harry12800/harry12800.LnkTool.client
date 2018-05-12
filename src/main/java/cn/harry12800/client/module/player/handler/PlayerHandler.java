@@ -10,7 +10,7 @@ import cn.harry12800.common.module.player.PlayerCmd;
  * @author -琴兽-
  *
  */
-@SocketModule(module = ModuleId.PLAYER)
+@SocketModule(module = ModuleId.USER)
 public interface PlayerHandler {
 
 	/**

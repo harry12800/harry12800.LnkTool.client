@@ -29,11 +29,11 @@ import cn.harry12800.common.module.ModuleId;
 import cn.harry12800.common.module.chat.ChatCmd;
 import cn.harry12800.common.module.chat.request.PrivateChatRequest;
 import cn.harry12800.common.module.chat.request.ShareFileRequest;
+import cn.harry12800.common.module.chat.response.MsgResponse;
 import cn.harry12800.common.module.player.PlayerCmd;
 import cn.harry12800.common.module.player.request.LoginRequest;
 import cn.harry12800.common.module.player.request.PullMsgRequest;
-import cn.harry12800.common.module.player.request.ShowAllPlayerRequest;
-import cn.harry12800.common.module.player.response.MsgResponse;
+import cn.harry12800.common.module.player.request.ShowAllUserRequest;
 import cn.harry12800.j2se.component.ClickAction;
 import cn.harry12800.j2se.component.InputText;
 import cn.harry12800.j2se.component.MButton;
@@ -183,7 +183,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			loginRequest.setPlayerName(userNameInput.getText());
 			loginRequest.setPassward(passInput.getText());
 			//构建请求
-			Request request = Request.valueOf(ModuleId.PLAYER, PlayerCmd.LOGIN, loginRequest.getBytes());
+			Request request = Request.valueOf(ModuleId.USER, PlayerCmd.LOGIN, loginRequest.getBytes());
 			client.sendRequest(request);
 		} catch (Exception e) {
 			msgLabel.setText("无法连接服务器");
@@ -192,9 +192,9 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	protected void pullUserList() {
 		try {
-			ShowAllPlayerRequest request = new ShowAllPlayerRequest();
+			ShowAllUserRequest request = new ShowAllUserRequest();
 			//构建请求
-			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.SHOW_ALL_USER, request.getBytes());
+			Request request1 = Request.valueOf(ModuleId.USER, PlayerCmd.SHOW_ALL_USER, request.getBytes());
 			client.sendRequest(request1);
 		} catch (Exception e) {
 			msgLabel.setText("无法连接服务器");
@@ -222,7 +222,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			PullMsgRequest request = new PullMsgRequest();
 			request.setUserid(Long.valueOf(getData().getSelf().getId()));
 			//构建请求
-			Request request1 = Request.valueOf(ModuleId.PLAYER, PlayerCmd.PULL_MSG, request.getBytes());
+			Request request1 = Request.valueOf(ModuleId.USER, PlayerCmd.PULL_MSG, request.getBytes());
 			client.sendRequest(request1);
 			System.out.println("主动拉取信息");
 		} catch (Exception e) {

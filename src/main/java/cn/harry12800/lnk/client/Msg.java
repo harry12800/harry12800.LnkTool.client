@@ -4,7 +4,7 @@ import java.util.Date;
 
 import cn.harry12800.common.module.chat.request.PrivateChatRequest;
 import cn.harry12800.common.module.chat.response.ChatResponse;
-import cn.harry12800.common.module.player.response.MsgResponse;
+import cn.harry12800.common.module.chat.response.MsgResponse;
 
 public class Msg {
 	private long id;
