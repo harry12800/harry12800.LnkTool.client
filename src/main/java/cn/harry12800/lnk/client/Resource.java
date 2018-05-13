@@ -9,7 +9,7 @@ public class Resource extends Letter {
 	private int resourceType;
 
 	public Resource(String title, String content, String date) {
-		super(title, content, date);
+		super(title, "",date);
 	}
 
 	public long getId() {

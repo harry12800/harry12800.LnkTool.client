@@ -1,5 +1,6 @@
 package cn.harry12800.client.module.handler;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import cn.harry12800.common.module.user.dto.PullResouceResponse;
 import cn.harry12800.lnk.client.ClientExportPanel;
 import cn.harry12800.lnk.client.Resource;
 import cn.harry12800.lnk.client.ResultCodeTip;
+import cn.harry12800.tools.DateUtils;
 import cn.harry12800.tools.Lists;
 
 /**
@@ -41,7 +43,7 @@ public class ResourceShareHandlerImpl implements ResourceShareHandler {
 			List<ResourceDto> resources = response.getResources();
 			List<Resource> lists = Lists.newArrayList();
 			for (ResourceDto r : resources) {
-				Resource c = new Resource(r.getResourceName(), r.getResourceName(), r.getGrantTime() + "");
+				Resource c = new Resource(r.getResourceName(), "",DateUtils.getTimeByFormat(new Date(r.getGrantTime()), "yyyy-MM-dd HH:mm:ss"));
 				c.setId(r.getId());
 				lists.add(c);
 			}
@@ -67,7 +69,7 @@ public class ResourceShareHandlerImpl implements ResourceShareHandler {
 		if (resultCode == ResultCode.SUCCESS) {
 			ResourceDto r = new ResourceDto();
 			r.readFromBytes(data);
-			Resource c = new Resource(r.getResourceName(), r.getResourceName(), r.getGrantTime() + "");
+			Resource c = new Resource(r.getResourceName(), "",DateUtils.getTimeByFormat(new Date(r.getGrantTime()), "yyyy-MM-dd HH:mm:ss"));
 			c.setId(r.getId());
 			ClientExportPanel.instance.pushResourceCallback(c);
 		} else {

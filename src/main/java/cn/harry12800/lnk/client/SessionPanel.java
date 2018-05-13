@@ -110,7 +110,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 				JFileChooser jFileChooser = new JFileChooser();
 				jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				jFileChooser.setCurrentDirectory(new File("D:/"));
-				jFileChooser.setSelectedFile(new File("D:/a.text"));
+//				jFileChooser.setSelectedFile(new File("D:/a.text"));
 				jFileChooser.setName("abc");
 				//				jFileChooser.setFileFilter(new FileTypeFilter());
 				int i = jFileChooser.showOpenDialog(null);

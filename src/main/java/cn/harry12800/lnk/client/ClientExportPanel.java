@@ -52,6 +52,7 @@ import cn.harry12800.j2se.style.UI;
 import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.ListPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
+import cn.harry12800.j2se.utils.Clip;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.FileUtils;
 import cn.harry12800.tools.Lists;
@@ -402,7 +403,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void downloadResourceCallback(ResourceDto response) {
-		FileUtils.byte2File(response.getData(), "D:/", response.getResourceName());
+		FileUtils.byte2File(response.getData(), dirPath, response.getResourceName());
+		try {
+			Clip.openFile(dirPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void pushResourceCallback(Resource response) {
