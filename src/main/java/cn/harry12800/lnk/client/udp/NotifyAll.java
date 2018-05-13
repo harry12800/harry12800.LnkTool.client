@@ -1,18 +1,10 @@
 package cn.harry12800.lnk.client.udp;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 
 import cn.harry12800.lnk.client.Config;
 import cn.harry12800.lnk.client.entity.UserInfo;

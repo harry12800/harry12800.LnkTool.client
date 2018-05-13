@@ -404,4 +404,8 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	public void downloadResourceCallback(ResourceDto response) {
 		FileUtils.byte2File(response.getData(), "D:/", response.getResourceName());
 	}
+
+	public void pushResourceCallback(Resource response) {
+		sessionDialog.addResources(response);
+	}
 }

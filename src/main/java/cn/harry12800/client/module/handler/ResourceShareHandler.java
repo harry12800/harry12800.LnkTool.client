@@ -29,11 +29,9 @@ public interface ResourceShareHandler {
 	@SocketCommand(cmd = ResourceShareCmd.pullAllResouces, desc = "回调资源")
 	public void pullAllResouces(int resultCode, byte[] data);
 
-	/**
-	 * 创建并登录帐号
-	 * @param resultCode
-	 * @param data {@link null}
-	 */
-	@SocketCommand(cmd = ResourceShareCmd.download_source, desc = "下载资源")
+	@SocketCommand(cmd = ResourceShareCmd.pullResouces, desc = "下载资源")
 	public void downloadResource(int resultCode, byte[] data);
+	 
+	@SocketCommand(cmd = ResourceShareCmd.pushResource, desc = "接收资源")
+	public void pushResource(int resultCode, byte[] data);
 }

@@ -62,7 +62,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 
 	private void initComponent() {
 		this.listPanel = new ListPanel<Resource>();
-		listPanel.setBounds(502, 30, 120, 345);
+		listPanel.setBounds(452, 30, 150, 305);
 		JScrollPane scrollPane = new JScrollPane(listPanel);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
@@ -72,17 +72,17 @@ public class SessionPanel extends JPanel implements KeyListener {
 		scrollPane.getVerticalScrollBar().setUI(myScrollBarUI);
 		// 屏蔽横向滚动条
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(502, 30, 120, 345);
+		scrollPane.setBounds(452, 30, 150, 305);
 		add(scrollPane);
 	}
 
 	private void setProps() {
 		titleLabel.setFont(UI.微软雅黑Font);
 		titleLabel.setForeground(UI.fontColor);
-		areaTextPanel.setSize(500, 250);
-		areaTextPanel.setPreferredSize(new Dimension(500, 250));
-		areaTextPanel1.setSize(500, 50);
-		areaTextPanel1.setPreferredSize(new Dimension(500, 50));
+		areaTextPanel.setSize(440, 250);
+		areaTextPanel.setPreferredSize(new Dimension(440, 250));
+		areaTextPanel1.setSize(440, 50);
+		areaTextPanel1.setPreferredSize(new Dimension(440, 50));
 	}
 
 	private void initCompListener() {
@@ -134,11 +134,11 @@ public class SessionPanel extends JPanel implements KeyListener {
 	private void initCompBounds() {
 		titleLabel.setBounds(2, 0, 200, 25);
 		closeButton.setBounds(585, 0, 25, 25);
-		areaTextPanel.setBounds(5, 30, 500, 250);
-		areaTextPanel1.setBounds(5, 285, 500, 50);
-		sendBtn.setBounds(430, 340, 50, 30);
-		clearBtn.setBounds(380, 340, 50, 30);
-		shareBtn.setBounds(300, 340, 50, 30);
+		areaTextPanel.setBounds(5, 30, 440, 250);
+		areaTextPanel1.setBounds(5, 285, 440, 50);
+		sendBtn.setBounds(400, 340, 50, 30);
+		clearBtn.setBounds(350, 340, 50, 30);
+		shareBtn.setBounds(530, 340, 50, 30);
 		notifyLabel.setBounds(5, 340, 200, 30);
 	}
 

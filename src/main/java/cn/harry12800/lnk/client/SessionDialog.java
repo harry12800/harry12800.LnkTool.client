@@ -183,6 +183,15 @@ public class SessionDialog extends JDialog {
 			itemPanel.setListPanel(sessionPanel.listPanel);
 			sessionPanel.listPanel.addItem(itemPanel);
 		}
-		revalidate();
+		sessionPanel.listPanel.revalidate();
+	}
+
+	public void addResources(Resource  r) {
+		ItemPanel<Resource> itemPanel = new ItemPanel<Resource>(r);
+		itemPanel.setListPanel(sessionPanel.listPanel);
+		sessionPanel.listPanel.addItem(itemPanel);
+		sessionPanel.listPanel.revalidate();
+		this.setVisible(true);
+		this.requestFocus();
 	}
 }

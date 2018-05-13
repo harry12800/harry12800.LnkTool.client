@@ -42,6 +42,7 @@ public class ResourceShareHandlerImpl implements ResourceShareHandler {
 			List<Resource> lists = Lists.newArrayList();
 			for (ResourceDto r : resources) {
 				Resource c = new Resource(r.getResourceName(), r.getResourceName(), r.getGrantTime() + "");
+				c.setId(r.getId());
 				lists.add(c);
 			}
 			ClientExportPanel.instance.showResources(lists);
@@ -56,6 +57,19 @@ public class ResourceShareHandlerImpl implements ResourceShareHandler {
 			ResourceDto response = new ResourceDto();
 			response.readFromBytes(data);
 			ClientExportPanel.instance.downloadResourceCallback(response);
+		} else {
+			ClientExportPanel.instance.showLoginMsg(resultCodeTip.getTipContent(resultCode));
+		}
+	}
+
+	@Override
+	public void pushResource(int resultCode, byte[] data) {
+		if (resultCode == ResultCode.SUCCESS) {
+			ResourceDto r = new ResourceDto();
+			r.readFromBytes(data);
+			Resource c = new Resource(r.getResourceName(), r.getResourceName(), r.getGrantTime() + "");
+			c.setId(r.getId());
+			ClientExportPanel.instance.pushResourceCallback(c);
 		} else {
 			ClientExportPanel.instance.showLoginMsg(resultCodeTip.getTipContent(resultCode));
 		}
