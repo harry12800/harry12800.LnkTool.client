@@ -107,7 +107,7 @@ public class SessionDialog extends JDialog {
 		StringBuilder builderHeader = new StringBuilder();
 		StringBuilder builderBody = new StringBuilder();
 		boolean isTo = false;
-		if (m.getId() == toUser.getId())
+		if (m.getFromPlayerId() == toUser.getId())
 			isTo = true;
 		if (isTo) {
 			if (m.getOnline() == 2)
