@@ -11,6 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
@@ -27,14 +28,17 @@ public class SessionPanel extends JPanel implements KeyListener {
 	ImageBtn closeButton;
 	JLabel titleLabel = new JLabel("语言翻译");
 	JLabel notifyLabel = new JLabel("");
-	AreaTextPanel areaTextPanel = new AreaTextPanel();
+//	AreaTextPanel areaTextPanel = new AreaTextPanel();
+	JTextPane areaTextPanel = new JTextPane();
 	AreaTextPanel areaTextPanel1 = new AreaTextPanel();
 	String btnText = "发送";
 	String clearText = "清空";
 	String shareText = "共享";
+	String imageText = "截图发送";
 	MButton sendBtn = new MButton(btnText, 50, 30);
 	MButton clearBtn = new MButton(clearText, 50, 30);
 	MButton shareBtn = new MButton(shareText, 50, 30);
+	MButton imageBtn = new MButton(imageText, 50, 30);
 	private SessionDialog dialog;
 	SendEvent e;
 	public ListPanel<Resource> listPanel;
@@ -63,6 +67,7 @@ public class SessionPanel extends JPanel implements KeyListener {
 	private void initComponent() {
 		this.listPanel = new ListPanel<Resource>();
 		listPanel.setBounds(452, 30, 150, 305);
+		listPanel.setBackground(UI.backColor);
 		JScrollPane scrollPane = new JScrollPane(listPanel);
 		scrollPane.setOpaque(false);
 		scrollPane.getViewport().setOpaque(false);
@@ -74,13 +79,27 @@ public class SessionPanel extends JPanel implements KeyListener {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(452, 30, 150, 305);
 		add(scrollPane);
+		
+		JScrollPane areaTextScrollPane = new JScrollPane(areaTextPanel);
+		areaTextScrollPane.setOpaque(false);
+		areaTextScrollPane.getViewport().setOpaque(false);
+		areaTextScrollPane.getVerticalScrollBar().setBackground(UI.backColor(100));
+		MyScrollBarUI myScrollBarUI1 = new MyScrollBarUI();
+		areaTextScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		areaTextScrollPane.getVerticalScrollBar().setUI(myScrollBarUI1);
+		// 屏蔽横向滚动条
+		areaTextScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		areaTextScrollPane.setBounds(5, 30, 440, 250);
+		add(areaTextScrollPane);
 	}
 
 	private void setProps() {
 		titleLabel.setFont(UI.微软雅黑Font);
 		titleLabel.setForeground(UI.fontColor);
-		areaTextPanel.setSize(440, 250);
-		areaTextPanel.setPreferredSize(new Dimension(440, 250));
+//		areaTextPanel.setSize(440, 250);
+//		areaTextPanel.setPreferredSize(new Dimension(440, 250));
+		areaTextPanel.setBackground(UI.backColor);
+		areaTextPanel.setAutoscrolls(true);
 		areaTextPanel1.setSize(440, 50);
 		areaTextPanel1.setPreferredSize(new Dimension(440, 50));
 	}
@@ -134,9 +153,10 @@ public class SessionPanel extends JPanel implements KeyListener {
 	private void initCompBounds() {
 		titleLabel.setBounds(2, 0, 200, 25);
 		closeButton.setBounds(585, 0, 25, 25);
-		areaTextPanel.setBounds(5, 30, 440, 250);
+//		areaTextPanel.setBounds(5, 30, 440, 250);
 		areaTextPanel1.setBounds(5, 285, 440, 50);
 		sendBtn.setBounds(400, 340, 50, 30);
+		imageBtn.setBounds(300, 340, 50, 30);
 		clearBtn.setBounds(350, 340, 50, 30);
 		shareBtn.setBounds(530, 340, 50, 30);
 		notifyLabel.setBounds(5, 340, 200, 30);
@@ -144,11 +164,12 @@ public class SessionPanel extends JPanel implements KeyListener {
 
 	private void addComponent() {
 		add(closeButton);
-		add(areaTextPanel);
+//		add(areaTextPanel);
 		add(areaTextPanel1);
 		add(titleLabel);
 		add(sendBtn);
 		add(clearBtn);
+		add(imageBtn);
 		add(shareBtn);
 		add(notifyLabel);
 	}

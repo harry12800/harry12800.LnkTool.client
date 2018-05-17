@@ -305,10 +305,11 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	public void showPrivateChatSuccessNotify(String string, MsgResponse msg) {
 		for (UserInfo clientInfo : userList) {
 			if (clientInfo.getId() == msg.getToId()) {
-				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
+//				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();
-				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(msg);
+				Msg m = new Msg(msg);
+				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(m);
 			}
 		}
 		Msg e = new Msg(msg);
@@ -346,10 +347,11 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	public void showReceiveMsg(MsgResponse msg) {
 		for (UserInfo clientInfo : userList) {
 			if (clientInfo.getId() == msg.getFromId()) {
-				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
+//				ClientExportPanel.this.sessionDialog.setClientInfo(clientInfo);
 				ClientExportPanel.this.sessionDialog.setVisible(true);
 				ClientExportPanel.this.sessionDialog.requestFocus();
-				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(msg);
+				Msg m = new Msg(msg);
+				ClientExportPanel.this.sessionDialog.showReceiveNewMsg(m);
 				System.out.println("接收消息");
 			}
 		}

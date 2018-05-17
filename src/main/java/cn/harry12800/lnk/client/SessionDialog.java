@@ -1,6 +1,7 @@
 package cn.harry12800.lnk.client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -12,13 +13,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
 import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
-import cn.harry12800.lnk.client.SessionPanel.SendEvent;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.DateUtils;
 
@@ -75,18 +81,22 @@ public class SessionDialog extends JDialog {
 	public void setClientInfo(UserInfo letter) {
 		this.toUser = letter;
 		ConcurrentLinkedQueue<Msg> linkedHashSet = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
-		String info = appendAllChatMsg(linkedHashSet);
+
+		//		String info = appendAllChatMsg(linkedHashSet);
 		if (linkedHashSet == null)
 			System.out.println("本地数据条数。" + 0);
 		else
 			System.out.println("本地数据条数。" + linkedHashSet.size());
 		sessionPanel.setTitle(letter.getTitle());
-		sessionPanel.areaTextPanel.setText(info);
-		sessionPanel.addSendEvent(new SendEvent() {
-			public void send(String content) {
-				ClientExportPanel.instance.sendMsg(letter, content);
-			}
-		});
+		if (linkedHashSet != null) {
+			linkedHashSet.stream().forEach(msg -> {
+				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa");
+				showReceiveNewMsg(msg);
+			});
+		}
+		//		sessionPanel.areaTextPanel.setText(info);
+		sessionPanel.addSendEvent(
+				content -> ClientExportPanel.instance.sendMsg(letter, content));
 		sessionPanel.listPanel.addCallBack(new ListCallBack<Resource>() {
 			@Override
 			public void item(ItemPanel<Resource> itemPanel, Resource letter) {
@@ -124,7 +134,7 @@ public class SessionDialog extends JDialog {
 		return builder.toString();
 	}
 
-	public void showReceiveNewMsg(MsgResponse m) {
+	public void showReceiveNewMsg1(MsgResponse m) {
 		StringBuilder builder = new StringBuilder();
 		String text = sessionPanel.areaTextPanel.getText().trim();
 		boolean isTo = false;
@@ -153,8 +163,89 @@ public class SessionDialog extends JDialog {
 			sessionPanel.areaTextPanel.setText(builder.toString());
 	}
 
+	public void showReceiveNewMsg(Msg m) {
+		StringBuilder builderHeader = new StringBuilder();
+		StringBuilder builderBody = new StringBuilder();
+		boolean isTo = false;
+		if (m.getId() == toUser.getId())
+			isTo = true;
+		if (isTo) {
+			if (m.getOnline() == 2)
+				builderHeader.append("（收到离线消息）");
+			builderHeader.append(toUser.getName());
+			builderHeader.append("[");
+			builderHeader.append(toUser.getId());
+			builderHeader.append("]");
+			builderHeader.append(" 悄悄对你说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
+			builderBody.append(new String(m.getData()));
+			builderBody.append("\n\n");
+			insertHeader(builderHeader.toString(), false, 12, StyleConstants.ALIGN_LEFT);
+			insertBody(builderBody.toString(), false, 12, StyleConstants.ALIGN_LEFT);
+		} else {
+			if (m.getOnline() == 2)
+				builderHeader.append("（对方离线消息）");
+			builderHeader.append("你悄悄对[" + toUser.getName() + "]说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
+			builderBody.append(new String(m.getData()));
+			builderBody.append("\n\n");
+			insertHeader(builderHeader.toString(), false, 12, StyleConstants.ALIGN_RIGHT);
+			System.out.println(34);
+			insertBody(builderBody.toString(), false, 12, StyleConstants.ALIGN_RIGHT);
+		}
+	}
+
 	public void showNotify(String tipContent) {
 		sessionPanel.notifyLabel.setText(tipContent);
+	}
+
+	private void insertHeader(String str, boolean bold, int fontSize, int align) {
+		SimpleAttributeSet attrSet = new SimpleAttributeSet();
+		StyleConstants.setAlignment(attrSet, align);
+		StyleConstants.setForeground(attrSet, Color.red);
+		//Component c=new JLabel("asd");
+		//StyleConstants.setComponent(attrSet, c);
+		// 颜色
+		if (bold == true) {
+			StyleConstants.setBold(attrSet, true);
+		} // 字体类型
+		StyleConstants.setFontSize(attrSet, fontSize);
+		// 字体大小
+		// StyleConstants.setFontFamily(attrSet, "黑体");
+		// 设置字体
+		insert(str, attrSet);
+	}
+
+	private void insertBody(String str, boolean bold, int fontSize, int align) {
+		SimpleAttributeSet attrSet = new SimpleAttributeSet();
+		StyleConstants.setForeground(attrSet, Color.WHITE);
+		StyleConstants.setAlignment(attrSet, align);
+		//Component c=new JLabel("asd");
+		//StyleConstants.setComponent(attrSet, c);
+		// 颜色
+		if (bold) {
+			StyleConstants.setBold(attrSet, true);
+		} // 字体类型
+		StyleConstants.setFontSize(attrSet, fontSize);
+		// 字体大小
+		// StyleConstants.setFontFamily(attrSet, "黑体");
+		// 设置字体
+
+		insert(str, attrSet);
+	}
+
+	private void insert(String str, AttributeSet attrSet) {
+		JTextPane textPane = sessionPanel.areaTextPanel;
+//		StyledDocument styledDocument = textPane.getStyledDocument();
+		Document doc = textPane.getDocument();
+//		int length = doc.getLength();
+		try {
+			doc.insertString(doc.getLength(), str, attrSet);
+//			styledDocument.setCharacterAttributes(length, doc.getLength(), attrSet, false);
+			textPane.setCaretPosition(doc.getLength() - 1);
+			textPane.setEditable(true);
+			textPane.setEnabled(true);
+		} catch (BadLocationException e) {
+			System.out.println("BadLocationException: " + e);
+		}
 	}
 
 	@Override
@@ -186,7 +277,7 @@ public class SessionDialog extends JDialog {
 		sessionPanel.listPanel.revalidate();
 	}
 
-	public void addResources(Resource  r) {
+	public void addResources(Resource r) {
 		ItemPanel<Resource> itemPanel = new ItemPanel<Resource>(r);
 		itemPanel.setListPanel(sessionPanel.listPanel);
 		sessionPanel.listPanel.addItem(itemPanel);
