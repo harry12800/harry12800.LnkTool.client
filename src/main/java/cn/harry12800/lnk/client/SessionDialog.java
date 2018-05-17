@@ -21,7 +21,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import cn.harry12800.Lnk.core.util.ImageUtils;
-import cn.harry12800.common.module.chat.dto.MsgResponse;
 import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
@@ -90,7 +89,6 @@ public class SessionDialog extends JDialog {
 		sessionPanel.setTitle(letter.getTitle());
 		if (linkedHashSet != null) {
 			linkedHashSet.stream().forEach(msg -> {
-				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa");
 				showReceiveNewMsg(msg);
 			});
 		}
@@ -103,64 +101,6 @@ public class SessionDialog extends JDialog {
 				ClientExportPanel.instance.downloadResource(letter);
 			}
 		});
-	}
-
-	private String appendAllChatMsg(ConcurrentLinkedQueue<Msg> linkedHashSet) {
-		if (linkedHashSet == null)
-			return "";
-		StringBuilder builder = new StringBuilder();
-		for (Msg m : linkedHashSet) {
-			boolean isTo = false;
-			if (m.getFromPlayerId() == toUser.getId())
-				isTo = true;
-			if (isTo) {
-				if (m.getOnline() == 2)
-					builder.append("（收到离线消息）");
-				builder.append(toUser.getName());
-				builder.append("[");
-				builder.append(toUser.getId());
-				builder.append("]");
-				builder.append(" 悄悄对你说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
-				builder.append(new String(m.getData()));
-				builder.append("\n\n");
-			} else {
-				if (m.getOnline() == 2)
-					builder.append("（对方离线消息）");
-				builder.append("你悄悄对[" + toUser.getName() + "]说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
-				builder.append(new String(m.getData()));
-				builder.append("\n\n");
-			}
-		}
-		return builder.toString();
-	}
-
-	public void showReceiveNewMsg1(MsgResponse m) {
-		StringBuilder builder = new StringBuilder();
-		String text = sessionPanel.areaTextPanel.getText().trim();
-		boolean isTo = false;
-		if (m.getId() == toUser.getId())
-			isTo = true;
-		if (isTo) {
-			if (m.getOnline() == 2)
-				builder.append("（收到离线消息）");
-			builder.append(toUser.getName());
-			builder.append("[");
-			builder.append(toUser.getId());
-			builder.append("]");
-			builder.append(" 悄悄对你说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
-			builder.append(new String(m.getData()));
-			builder.append("\n\n");
-		} else {
-			if (m.getOnline() == 2)
-				builder.append("（对方离线消息）");
-			builder.append("你悄悄对[" + toUser.getName() + "]说:（" + DateUtils.getTimeByFormat(m.getSendTime(), "MM-dd HH:mm:ss") + "）\n");
-			builder.append(new String(m.getData()));
-			builder.append("\n\n");
-		}
-		if (!text.isEmpty())
-			sessionPanel.areaTextPanel.setText(text + "\n\n" + builder.toString());
-		else
-			sessionPanel.areaTextPanel.setText(builder.toString());
 	}
 
 	public void showReceiveNewMsg(Msg m) {
