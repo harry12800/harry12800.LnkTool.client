@@ -30,6 +30,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Response> {
 	private void handlerResponse(Response response) {
 
 		//获取命令执行器
+		System.out.println("module："+response.getModule()+"  cmd："+response.getCmd());
 		Invoker invoker = InvokerHoler.getInvoker(response.getModule(), response.getCmd());
 		if (invoker != null) {
 			try {
