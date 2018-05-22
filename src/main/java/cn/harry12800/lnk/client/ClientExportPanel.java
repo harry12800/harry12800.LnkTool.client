@@ -283,7 +283,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	private void pullMsg() {
 		try {
 			PullMsgRequest request = new PullMsgRequest();
-			request.setUserid(data.getSelf().getId());
+			request.setUserid( 1);
 			//构建请求
 			Request request1 = Request.valueOf(ModuleId.USER, UserCmd.PULL_MSG, request.getBytes());
 			client.sendRequest(request1);
@@ -325,27 +325,18 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			for (UserInfo userInfo : userList) {
 				//				System.out.println(userInfo);
 				if (msg.getFromId() == userInfo.getId()) {
-					ConcurrentLinkedQueue<Msg> linkedHashSet = getData().getMaps().get(userInfo.getId());
+					ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(userInfo.getId());
 					if (linkedHashSet == null) {
 						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
 						newArrayList.add(new Msg(msg));
-						getData().getMaps().put(userInfo.getId(), newArrayList);
+						data.getMaps().put(userInfo.getId(), newArrayList);
 					} else {
-						getData().getMaps().get(userInfo.getId()).add(new Msg(msg));
+						data.getMaps().get(userInfo.getId()).add(new Msg(msg));
 					}
 				}
 			}
 		}
 		saveConfigObject();
-	}
-
-	public void loginSuccess(UserResponse user) {
-		msgLabel.setText("登录成功！");
-		UserInfo self = new UserInfo(user.getUserName(), user.getId() + "", "");
-		self.setToken(passInput.getText());
-		data.setSelf(self);
-		pullUserList();
-		pullResourceShare();
 	}
 
 	private void pullResourceShare() {
@@ -452,7 +443,12 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	@Override
 	public void initLoadData() {
+		pullSelfInfo();
 		pullUserList();
+	}
+
+	private void pullSelfInfo() {
+		
 	}
 
 	public void showReceiveNewMsg(Msg m) {
