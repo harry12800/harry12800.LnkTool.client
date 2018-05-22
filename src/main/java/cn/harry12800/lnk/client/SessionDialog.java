@@ -20,11 +20,11 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import cn.harry12800.Lnk.core.util.ImageUtils;
+import cn.harry12800.lnk.core.util.ImageUtils;
 import cn.harry12800.j2se.action.DragListener;
 import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
-import cn.harry12800.lnk.client.entity.UserInfo;
+import cn.harry12800.lnk.core.entity.UserInfo;
 import cn.harry12800.tools.DateUtils;
 
 public class SessionDialog extends JDialog {

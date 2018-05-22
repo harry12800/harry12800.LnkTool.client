@@ -11,11 +11,11 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import cn.harry12800.Lnk.core.Context;
-import cn.harry12800.Lnk.core.CorePanel;
-import cn.harry12800.Lnk.core.FunctionPanelConfig;
-import cn.harry12800.Lnk.core.FunctionPanelModel;
-import cn.harry12800.Lnk.core.util.ImageUtils;
+import cn.harry12800.lnk.core.Context;
+import cn.harry12800.lnk.core.CorePanel;
+import cn.harry12800.lnk.core.FunctionPanelConfig;
+import cn.harry12800.lnk.core.FunctionPanelModel;
+import cn.harry12800.lnk.core.util.ImageUtils;
 import cn.harry12800.j2se.component.panel.AreaTextPanel;
 import cn.harry12800.j2se.style.MyScrollBarUI;
 import cn.harry12800.j2se.style.UI;

@@ -19,12 +19,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 
-import cn.harry12800.Lnk.core.Context;
-import cn.harry12800.Lnk.core.CorePanel;
-import cn.harry12800.Lnk.core.FunctionPanelConfig;
-import cn.harry12800.Lnk.core.FunctionPanelModel;
-import cn.harry12800.Lnk.core.util.ImageUtils;
-import cn.harry12800.client.Client;
+import cn.harry12800.lnk.client.Client;
+import cn.harry12800.lnk.core.Context;
+import cn.harry12800.lnk.core.CorePanel;
+import cn.harry12800.lnk.core.FunctionPanelConfig;
+import cn.harry12800.lnk.core.FunctionPanelModel;
+import cn.harry12800.lnk.core.util.ImageUtils;
 import cn.harry12800.common.core.model.Request;
 import cn.harry12800.common.module.ChatCmd;
 import cn.harry12800.common.module.ModuleId;
@@ -53,7 +53,7 @@ import cn.harry12800.j2se.tip.ItemPanel;
 import cn.harry12800.j2se.tip.ListPanel;
 import cn.harry12800.j2se.tip.ListPanel.ListCallBack;
 import cn.harry12800.j2se.utils.Clip;
-import cn.harry12800.lnk.client.entity.UserInfo;
+import cn.harry12800.lnk.core.entity.UserInfo;
 import cn.harry12800.tools.FileUtils;
 import cn.harry12800.tools.Lists;
 import io.netty.handler.codec.socksx.SocksPortUnificationServerHandler;
@@ -75,16 +75,13 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	ImageBtn setBtn = new ImageBtn(ImageUtils.getByName("post.png"));
 	InputText userNameInput;
 	InputText passInput;
-	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 	private SessionDialog sessionDialog;
-	Client client = null;
 	private List<UserInfo> userList;
 	static Map<UserInfo, SessionDialog> mapsDialogByUser = new HashMap<UserInfo, SessionDialog>(0);
 	static Map<Long, UserInfo> mapsUserByUserid = new HashMap<Long, UserInfo>(0);
 
-	public ClientExportPanel(Context context) throws Exception {
+	public ClientExportPanel(Context context)  {
 		super(context);
-		client = applicationContext.getBean(Client.class);
 		instance = this;
 		setBackground(UI.backColor);
 		setLayout(null);
@@ -119,7 +116,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 		hotKey();
 	}
 
-	private void addText() throws Exception {
+	private void addText()  {
 		userNameInput = new InputText(30);
 
 		Builder a = new Builder();
@@ -187,27 +184,27 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	private void sendLoginRequest() {
-		try {
-			LoginRequest loginRequest = new LoginRequest();
-			loginRequest.setPlayerName(userNameInput.getText());
-			loginRequest.setPassward(passInput.getText());
-			//构建请求
-			Request request = Request.valueOf(ModuleId.USER, UserCmd.LOGIN, loginRequest.getBytes());
-			client.sendRequest(request);
-		} catch (Exception e) {
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			LoginRequest loginRequest = new LoginRequest();
+//			loginRequest.setPlayerName(userNameInput.getText());
+//			loginRequest.setPassward(passInput.getText());
+//			//构建请求
+//			Request request = Request.valueOf(ModuleId.USER, UserCmd.LOGIN, loginRequest.getBytes());
+//			client.sendRequest(request);
+//		} catch (Exception e) {
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	protected void pullUserList() {
-		try {
-			ShowAllUserRequest request = new ShowAllUserRequest();
-			//构建请求
-			Request request1 = Request.valueOf(ModuleId.USER, UserCmd.SHOW_ALL_USER, request.getBytes());
-			client.sendRequest(request1);
-		} catch (Exception e) {
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			ShowAllUserRequest request = new ShowAllUserRequest();
+//			//构建请求
+//			Request request1 = Request.valueOf(ModuleId.USER, UserCmd.SHOW_ALL_USER, request.getBytes());
+//			client.sendRequest(request1);
+//		} catch (Exception e) {
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	public void showUser(List<UserInfo> lists) {
@@ -227,30 +224,30 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	private void pullMsg() {
-		try {
-			PullMsgRequest request = new PullMsgRequest();
-			request.setUserid(data.getSelf().getId());
-			//构建请求
-			Request request1 = Request.valueOf(ModuleId.USER, UserCmd.PULL_MSG, request.getBytes());
-			client.sendRequest(request1);
-			System.out.println("主动拉取信息");
-		} catch (Exception e) {
-			e.printStackTrace();
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			PullMsgRequest request = new PullMsgRequest();
+//			request.setUserid(data.getSelf().getId());
+//			//构建请求
+//			Request request1 = Request.valueOf(ModuleId.USER, UserCmd.PULL_MSG, request.getBytes());
+//			client.sendRequest(request1);
+//			System.out.println("主动拉取信息");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	public void sendMsg(UserInfo letter, String content) {
-		try {
-			PrivateChatRequest request = new PrivateChatRequest();
-			request.setContext(content);
-			request.setTargetPlayerId(Long.valueOf(letter.getContent()));
-			//构建请求
-			Request req = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
-			client.sendRequest(req);
-		} catch (Exception e) {
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			PrivateChatRequest request = new PrivateChatRequest();
+//			request.setContext(content);
+//			request.setTargetPlayerId(Long.valueOf(letter.getContent()));
+//			//构建请求
+//			Request req = Request.valueOf(ModuleId.CHAT, ChatCmd.PRIVATE_CHAT, request.getBytes());
+//			client.sendRequest(req);
+//		} catch (Exception e) {
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	public void showNotify(String tipContent) {
@@ -295,15 +292,15 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	private void pullResourceShare() {
-		try {
-			PullResourceRequest request = new PullResourceRequest();
-			request.setUserid(data.getSelf().getId());
-			System.err.println(data.getSelf().getId());
-			Request request1 = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.pullAllResouces, request.getBytes());
-			client.sendRequest(request1);
-		} catch (Exception e) {
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			PullResourceRequest request = new PullResourceRequest();
+//			request.setUserid(data.getSelf().getId());
+//			System.err.println(data.getSelf().getId());
+//			Request request1 = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.pullAllResouces, request.getBytes());
+//			client.sendRequest(request1);
+//		} catch (Exception e) {
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	public void showPrivateChatSuccessNotify(String string, MsgResponse msg) {
@@ -372,25 +369,25 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void shareFile(UserInfo toUser, String path, String name) {
-		try {
-			File file = new File(path);
-			SourceShareRequest request = new SourceShareRequest();
-			request.setPath(path);
-			request.setResourceName(name);
-			request.setResourceType(file.isFile() ? 1 : 2);
-			request.setProviderId(data.getSelf().getId());
-			request.setRecipientId(toUser.getId());
-			if (file.isFile()) {
-				byte[] file2byte = FileUtils.file2byte1(path);
-				request.setData(file2byte);
-			}
-			//构建请求
-			Request req = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.upload_source, request.getBytes());
-			client.sendRequest(req);
-		} catch (Exception e) {
-			e.printStackTrace();
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			File file = new File(path);
+//			SourceShareRequest request = new SourceShareRequest();
+//			request.setPath(path);
+//			request.setResourceName(name);
+//			request.setResourceType(file.isFile() ? 1 : 2);
+//			request.setProviderId(data.getSelf().getId());
+//			request.setRecipientId(toUser.getId());
+//			if (file.isFile()) {
+//				byte[] file2byte = FileUtils.file2byte1(path);
+//				request.setData(file2byte);
+//			}
+//			//构建请求
+//			Request req = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.upload_source, request.getBytes());
+//			client.sendRequest(req);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	public void showResources(List<Resource> lists) {
@@ -398,14 +395,14 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void downloadResource(Resource letter) {
-		try {
-			DownLoadResourceRequest request = new DownLoadResourceRequest();
-			request.setResourceId(letter.getId());
-			Request r = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.pullResouces, request.getBytes());
-			client.sendRequest(r);
-		} catch (Exception e) {
-			msgLabel.setText("无法连接服务器");
-		}
+//		try {
+//			DownLoadResourceRequest request = new DownLoadResourceRequest();
+//			request.setResourceId(letter.getId());
+//			Request r = Request.valueOf(ModuleId.RESOURCE, ResourceShareCmd.pullResouces, request.getBytes());
+//			client.sendRequest(r);
+//		} catch (Exception e) {
+//			msgLabel.setText("无法连接服务器");
+//		}
 	}
 
 	public void downloadResourceCallback(ResourceDto response) {

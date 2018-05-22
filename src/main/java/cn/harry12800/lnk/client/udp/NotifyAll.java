@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import cn.harry12800.lnk.client.Config;
-import cn.harry12800.lnk.client.entity.UserInfo;
+import cn.harry12800.lnk.core.entity.UserInfo;
 
 /**
  * 广播我已上线

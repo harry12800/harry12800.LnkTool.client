@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import cn.harry12800.lnk.client.entity.UserInfo;
+import cn.harry12800.lnk.core.entity.UserInfo;
 import cn.harry12800.tools.Lists;
 
 public class ClientJsonConfig {
