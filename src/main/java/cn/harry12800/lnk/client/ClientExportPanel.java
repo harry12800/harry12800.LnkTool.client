@@ -56,6 +56,7 @@ import cn.harry12800.j2se.utils.Clip;
 import cn.harry12800.lnk.client.entity.UserInfo;
 import cn.harry12800.tools.FileUtils;
 import cn.harry12800.tools.Lists;
+import io.netty.handler.codec.socksx.SocksPortUnificationServerHandler;
 
 @FunctionPanelModel(configPath = "client", height = 6 * 32 + 250, width = 350, defaultDisplay = true, backgroundImage = "client_back.jpg", headerImage = "teminal.png", desc = "多端操作。")
 @FunctionPanelConfig(filename = "client.json")
@@ -262,18 +263,21 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
 		System.out.println("离线消息：" + msgs.size());
-		for (MsgResponse msgResponse : msgs) {
+		for (MsgResponse msg : msgs) {
+			String string = new String(msg.getData());
+			System.err.println("-------------:"+string);
+			System.out.println(msg);
 			//			System.err.println(msgResponse);
 			for (UserInfo userInfo : userList) {
 				//				System.out.println(userInfo);
-				if (msgResponse.getFromId() == userInfo.getId()) {
+				if (msg.getFromId() == userInfo.getId()) {
 					ConcurrentLinkedQueue<Msg> linkedHashSet = getData().getMaps().get(userInfo.getId());
 					if (linkedHashSet == null) {
 						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
-						newArrayList.add(new Msg(msgResponse));
+						newArrayList.add(new Msg(msg));
 						getData().getMaps().put(userInfo.getId(), newArrayList);
 					} else {
-						getData().getMaps().get(userInfo.getId()).add(new Msg(msgResponse));
+						getData().getMaps().get(userInfo.getId()).add(new Msg(msg));
 					}
 				}
 			}
