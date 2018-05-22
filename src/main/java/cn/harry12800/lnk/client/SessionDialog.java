@@ -76,33 +76,6 @@ public class SessionDialog extends JDialog {
 		int h = (int) d.getHeight();
 		this.setLocation((w - this.getWidth()) / 2, (h - this.getHeight()) / 2);
 	}
-
-	public void setClientInfo(UserInfo letter) {
-		this.toUser = letter;
-		ConcurrentLinkedQueue<Msg> linkedHashSet = ClientExportPanel.instance.getData().getMaps().get(letter.getId());
-
-		//		String info = appendAllChatMsg(linkedHashSet);
-		if (linkedHashSet == null)
-			System.out.println("本地数据条数。" + 0);
-		else
-			System.out.println("本地数据条数。" + linkedHashSet.size());
-		sessionPanel.setTitle(letter.getTitle());
-		if (linkedHashSet != null) {
-			linkedHashSet.stream().forEach(msg -> {
-				showReceiveNewMsg(msg);
-			});
-		}
-		//		sessionPanel.areaTextPanel.setText(info);
-		sessionPanel.addSendEvent(
-				content -> ClientExportPanel.instance.sendMsg(letter, content));
-		sessionPanel.listPanel.addCallBack(new ListCallBack<Resource>() {
-			@Override
-			public void item(ItemPanel<Resource> itemPanel, Resource letter) {
-				ClientExportPanel.instance.downloadResource(letter);
-			}
-		});
-	}
-
 	public void showReceiveNewMsg(Msg m) {
 		StringBuilder builderHeader = new StringBuilder();
 		StringBuilder builderBody = new StringBuilder();
@@ -199,8 +172,8 @@ public class SessionDialog extends JDialog {
 	 * 清空本回话好友的本地数据。
 	 */
 	public void clearChatMsg() {
-		ClientExportPanel.instance.getData().getMaps().remove(toUser.getId());
-		ClientExportPanel.instance.saveConfigObject();
+//		ClientExportPanel.instance.getData().getMaps().remove(toUser.getId());
+//		ClientExportPanel.instance.saveConfigObject();
 	}
 
 	public void shareFile(String path, String name) {
