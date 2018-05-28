@@ -316,27 +316,27 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 	}
 
 	public void showPullMsg(List<MsgResponse> msgs) throws Exception {
-		System.out.println("离线消息：" + msgs.size());
-		for (MsgResponse msg : msgs) {
-			String string = new String(msg.getData());
-			System.err.println("-------------:" + string);
-			System.out.println(msg);
-			//			System.err.println(msgResponse);
-			for (UserInfo userInfo : userList) {
-				//				System.out.println(userInfo);
-				if (msg.getFromId() == userInfo.getId()) {
-					ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(userInfo.getId());
-					if (linkedHashSet == null) {
-						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
-						newArrayList.add(new Msg(msg));
-						data.getMaps().put(userInfo.getId(), newArrayList);
-					} else {
-						data.getMaps().get(userInfo.getId()).add(new Msg(msg));
-					}
-				}
-			}
-		}
-		saveConfigObject();
+//		System.out.println("离线消息：" + msgs.size());
+//		for (MsgResponse msg : msgs) {
+//			String string = new String(msg.getData());
+//			System.err.println("-------------:" + string);
+//			System.out.println(msg);
+//			//			System.err.println(msgResponse);
+//			for (UserInfo userInfo : userList) {
+//				//				System.out.println(userInfo);
+//				if (msg.getFromId() == userInfo.getId()) {
+//					ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(userInfo.getId());
+//					if (linkedHashSet == null) {
+//						ConcurrentLinkedQueue<Msg> newArrayList = new ConcurrentLinkedQueue<>();
+//						newArrayList.add(new Msg(msg));
+//						data.getMaps().put(userInfo.getId(), newArrayList);
+//					} else {
+//						data.getMaps().get(userInfo.getId()).add(new Msg(msg));
+//					}
+//				}
+//			}
+//		}
+//		saveConfigObject();
 	}
 
 	private void pullResourceShare() {
@@ -360,14 +360,6 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			}
 		}
 		Msg e = new Msg(msg);
-		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToId());
-		if (linkedHashSet == null) {
-			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
-			value.add(e);
-			data.getMaps().put(msg.getToId(), value);
-		} else {
-			data.getMaps().get(msg.getToId()).add(e);
-		}
 		saveConfigObject();
 	}
 
@@ -379,16 +371,16 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 				System.out.println("接收消息");
 			}
 		}
-		Msg e = new Msg(msg);
-		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToId());
-		if (linkedHashSet == null) {
-			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
-			value.add(e);
-			data.getMaps().put(msg.getToId(), value);
-		} else {
-			data.getMaps().get(msg.getToId()).add(e);
-		}
-		saveConfigObject();
+//		Msg e = new Msg(msg);
+//		ConcurrentLinkedQueue<Msg> linkedHashSet = data.getMaps().get(msg.getToId());
+//		if (linkedHashSet == null) {
+//			ConcurrentLinkedQueue<Msg> value = new ConcurrentLinkedQueue<>();
+//			value.add(e);
+//			data.getMaps().put(msg.getToId(), value);
+//		} else {
+//			data.getMaps().get(msg.getToId()).add(e);
+//		}
+//		saveConfigObject();
 	}
 
 	public void shareFile(UserInfo toUser, String path, String name) {
@@ -398,7 +390,7 @@ public class ClientExportPanel extends CorePanel<ClientJsonConfig> {
 			request.setPath(path);
 			request.setResourceName(name);
 			request.setResourceType(file.isFile() ? 1 : 2);
-			request.setProviderId(data.getSelf().getId());
+//			request.setProviderId(data.getSelf().getId());
 			request.setRecipientId(toUser.getId());
 			if (file.isFile()) {
 				byte[] file2byte = FileUtils.file2byte1(path);
