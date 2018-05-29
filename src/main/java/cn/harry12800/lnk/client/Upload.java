@@ -20,12 +20,12 @@ public class Upload {
 
 		//一种：参数请求体
 		FormBody paramsBody = new FormBody.Builder()
-				.add("path", "D:/aa.txt")
+				.add("path", "/root/FileZilla_3.27.0.1_win64.zip")
 				.build();
 
 		//二种：文件请求体
 		MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
-		File file = new File("/data/data/com.example.company/files/plan/plans.xml");
+		File file = new File("D:\\software\\FileZilla_3.27.0.1_win64.zip");
 		RequestBody fileBody = RequestBody.create(type, file);
 
 		//三种：混合参数和文件请求
@@ -35,17 +35,17 @@ public class Upload {
 				.addPart(Headers.of("Content-Disposition",
 						"form-data; name=\"params\""), paramsBody)
 				.addPart(Headers.of("Content-Disposition",
-						"form-data; name=\"file\"; filename=\"plans.xml\""), fileBody)
+						"form-data; name=\"file\"; filename=\"FileZilla_3.27.0.1_win64.zip\""), fileBody)
 				//一样的效果
-				/*.addFormDataPart("id",currentPlan.getPlanId()+"")
-				.addFormDataPart("name",currentPlan.getName())
+				.addFormDataPart("path", "/root/FileZilla_3.27.0.1_win64.zip")
+				/*.addFormDataPart("name",currentPlan.getName())
 				.addFormDataPart("volume",currentPlan.getVolume())
 				.addFormDataPart("type",currentPlan.getType()+"")
 				.addFormDataPart("mode",currentPlan.getMode()+"")
 				.addFormDataPart("params","plans.xml",fileBody)*/
 				.build();
 
-		Request request = new Request.Builder().url("http://192.168.1.121:8080/Server/Service")
+		Request request = new Request.Builder().url("http://120.78.177.24/upload")
 				.addHeader("User-Agent", "android")
 				.header("Content-Type", "text/html; charset=utf-8;")
 				.post(multipartBody)//传参数、文件或者混合，改一下就行请求体就行
@@ -54,15 +54,19 @@ public class Upload {
 		client.newCall(request).enqueue(new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {
+				System.out.println("失败！");
 			}
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
 
-				System.out.printf("xxx", "1、连接的消息" + response.message());
+				System.out.println("1、连接的消息" + response.message());
 				if (response.isSuccessful()) {
-					System.out.printf("xxx", "2、连接成功获取的内容" + response.body().string());
+					System.out.println("2、连接成功获取的内容" + response.body().string());
 				}
 			}
 		});
+	}
+	public static void main(String[] args) {
+		new Upload();
 	}
 }
